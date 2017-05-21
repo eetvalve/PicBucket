@@ -2,11 +2,7 @@
   "name": "picbucket",
   "version": "1.0.0",
   "description": "image-sharing service",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-    "scripts": {
+  "scripts": {
     "start": "node ./server/bin/www"
   },
   "dependencies": {

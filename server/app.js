@@ -10,6 +10,8 @@ var expressJwt = require('express-jwt');
 var utf8 = require('utf8');
 
 
+var config = require('./config.json');
+
 var uutiset = require('./routes/uutisetM');
 
 

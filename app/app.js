@@ -16,9 +16,10 @@ var moment2 = require('moment-business-days');
 
 //requiree angularin sisÃ¤iset omatekemÃ¤t UUUDET moduulit
 require('./main/mainController');
+require('./search/searchController');
+require('./navigation/navigationController');
 
-
-var app = angular.module('app', ['ui.bootstrap', 'ui.router', 'textAngular', 'mainctrl']);
+var app = angular.module('app', ['ui.bootstrap', 'ui.router', 'textAngular', 'mainctrl', 'searchctrl', 'navigationctrl']);
 
 
 app.config(function ($stateProvider, $urlRouterProvider) {
@@ -33,7 +34,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 views: {
                     '': {templateUrl: 'home.html'},
                     // the child views will be defined here (absolutely named)
-                    'columnOne@home': {templateUrl: 'main/mainView.html'}
+                    'columnOne@home': {templateUrl: 'main/mainView.html'},
+                    'columnTwo@home': {templateUrl: 'search/searchView.html'},
+                    'columnThree@home': {templateUrl: 'navigation/navigationView.html'}
                     
                 },
                 data: {activeTab: 'home'}

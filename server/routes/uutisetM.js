@@ -3,7 +3,7 @@ var router = express.Router();
 
 var config = require('../config.json');
 var mongoose = require('mongoose');
-db = mongoose.createConnection(config.connectionString);
+mongoose.connect(config.connectionString);
 var Uutiset = require('../models/uutisetM');
 
 
@@ -12,10 +12,10 @@ router.post('/api/v1/uutinen', function (req, res) {
 
     var results = [];
 
-    var uutiset = new Uutiset();		
+    var uutiset = new Uutiset();		// create a new instance of the Bear model
     uutiset.title = req.body.title;
     uutiset.text = req.body.text;
-
+    uutiset.date = req.body.date;
 
     uutiset.save(function (err) {
         if (err) {
@@ -102,7 +102,7 @@ router.put('/api/v1/uutinen/:todo_id', function (req, res) {
 
             uutiset.title= req.body.title;
             uutiset.text= req.body.text;
-
+            uutiset.date= req.body.date;
 
             uutiset.save(function (err) {
                 if (err) {

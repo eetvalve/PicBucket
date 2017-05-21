@@ -1,5 +1,15 @@
+
 <div class="row">
-        <div class="col-lg-12">
-            <div id='kuvat' ui-view="columnOne"></div>
-        </div>
+  <div class="col-sm-3">
+     
+      <div id='leftNavigation' ui-view="columnThree"></div>
+  </div>
+    <div class="col-sm-9">
+        <div id='searchRow' ui-view="columnTwo"></div>
     </div>
+
+    <div class="col-sm-9">
+        <div id='kuvat' ui-view="columnOne"></div>
+    </div>
+</div>
+

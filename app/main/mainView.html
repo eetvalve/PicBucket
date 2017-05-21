@@ -1,3 +1,5 @@
+<h1>Images</h1>
+
 <div ng-controller="MainCtrl">
     
     <div ng-repeat="name in names">{{name}}</div>
@@ -9,9 +11,10 @@
 
         <div class="todo-list-uutiset">
             <ul class='uutisRajat' ng-repeat="todo in todoData">
-                <li>
-                    
-                        <h3 class='h3Uutiset'> {{ todo.title}}  </h3> <br><p> {{ todo.text}}</p>   
+                <li ng-class="{'liShow': show, 'liHide': !show}">
+                    <button type="submit" class="btn btn-primary btn-sm pull-right" ng-click="deleteTodo(todo._id)">delete</button> 
+                        <button ng-hide="editing" type="submit" class="btn btn-primary btn-sm pull-right" ng-click="editing = true; show=!show">edit</button>  
+                        <h3 class='h3Uutiset'> {{ todo.title}}  <span class='oikeaLean2'>{{todo.date}}</span></h3> <br><p> {{ todo.text}}</p>   
 
                     <div class="todo-form">
                         <form ng-show="editing" ng-submit="editing = false">
@@ -20,7 +23,7 @@
                                 <textarea ng-model="todo.text" placeholder="teksti" style='width:550px'></textarea>
 
                             </div>
-                           
+                            <button type="submit" class="btn btn-primary btn-md" ng-click="editTodo(todo._id, todo.title, todo.text, todo.date)">Julkaise</button>
                         </form>
                     </div>
                 </li>

@@ -1,10 +1,10 @@
+var moment = require('moment');
+
 
 angular.module('mainctrl', [])
         .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
 
-                $scope.names = ['janne', 'mehu', 'dead'];
-
-
+                $scope.day = moment.utc().format('DD-MM-YYYY');
 
 
                 $scope.todoData = {};
@@ -32,8 +32,8 @@ angular.module('mainctrl', [])
 
                     var data = {
                         title: title,
-                        text: text
-                        
+                        text: text,
+                        date: $scope.day
 
                     };
 
@@ -80,5 +80,6 @@ angular.module('mainctrl', [])
                                 console.log('Error: ' + data);
                             });
                 };
+
 
             }]);
