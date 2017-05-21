@@ -1,0 +1,16 @@
+ALUKSI:
+
+npm install <--command line projektikansion juureen
+
+
+//browserify ja watchify ohjeet!!
+
+ASENNA allaolevat globaalista npm install -g nnÃ¶nÃ¶nÃ¶nÃ¶Ã¶
+
+//aluksi luodaan file
+browserify --entry app/app.js --outfile app/dist/app.js
+
+//sen jÃ¤lkeen tÃ¤mÃ¤ pÃ¤Ã¤lle joka pÃ¤ivittÃ¤Ã¤ muutoksia
+watchify --entry app/app.js --outfile app/dist/app.js -d
+
+//sitten servu pÃ¤Ã¤lle npm start

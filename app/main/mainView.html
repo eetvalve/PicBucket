@@ -1,0 +1,45 @@
+<div ng-controller="MainCtrl">
+    
+    <div ng-repeat="name in names">{{name}}</div>
+    
+    
+    
+
+
+
+        <div class="todo-list-uutiset">
+            <ul class='uutisRajat' ng-repeat="todo in todoData">
+                <li>
+                    
+                        <h3 class='h3Uutiset'> {{ todo.title}}  </h3> <br><p> {{ todo.text}}</p>   
+
+                    <div class="todo-form">
+                        <form ng-show="editing" ng-submit="editing = false">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-md" placeholder="otsikko" ng-model="todo.title">
+                                <textarea ng-model="todo.text" placeholder="teksti" style='width:550px'></textarea>
+
+                            </div>
+                           
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+
+        <br>
+
+        <div class="todo-form">
+            <form>
+                <div class="form-group">
+                    <input type="text" class="form-control input-md" placeholder="otsikko" ng-model="formData.title">
+                    <textarea ng-model="formData.text" placeholder="teksti" style='width:550px'></textarea>
+
+                </div>
+                <button type="submit" class="btn btn-primary btn-md" ng-click="createTodo(formData.title, formData.text)">Julkaise</button>
+            </form>
+        </div>
+    
+</div>

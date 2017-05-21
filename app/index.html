@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PicBucket</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="assets/stylesheets/style.css" rel="stylesheet" media="screen">
+    </head>
+    <body ng-app="app">
+        <!-- THIS IS WHERE WE WILL INJECT OUR CONTENT ============================== -->
+        <div class="content">
+
+            <div ui-view></div>
+
+        </div>
+
+        <!--browserify makes one big file here, from all the project files-->
+        <script src="./dist/app.js"></script>
+    </body>
+</html>
