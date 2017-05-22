@@ -11,15 +11,18 @@ var textAngular = require('textangular');
 var moment = require('moment');
 require('angular-dynamic-locale');
 var moment2 = require('moment-business-days');
-
+require('ng-file-upload');
 
 
 //requiree angularin sisÃ¤iset omatekemÃ¤t UUUDET moduulit
 require('./main/mainController');
 require('./search/searchController');
 require('./navigation/navigationController');
+require('./modal/uploadModalController');
+require('./modal/uploadModalDirective');
 
-var app = angular.module('app', ['ui.bootstrap', 'ui.router', 'textAngular', 'mainctrl', 'searchctrl', 'navigationctrl']);
+var app = angular.module('app', [ 'ui.bootstrap', 'ui.router', 'textAngular', 'ngFileUpload', 'mainctrl', 'searchctrl', 'navigationctrl', 'uploadmodalctrl',
+    'uploadmodaldirective']);
 
 
 app.config(function ($stateProvider, $urlRouterProvider) {

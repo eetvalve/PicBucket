@@ -25,11 +25,6 @@ angular.module('mainctrl', [])
                 // Create a new todo
                 $scope.createTodo = function (title, text) {
 
-
-
-
-
-
                     var data = {
                         title: title,
                         text: text,
