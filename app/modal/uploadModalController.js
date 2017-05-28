@@ -27,4 +27,7 @@ var vm = this;
                 vm.progress = 'progress: ' + progressPercentage + '% '; // capture upload progress
             });
         };
+        
+        
+        
     }]);

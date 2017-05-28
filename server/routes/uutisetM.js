@@ -3,7 +3,7 @@ var router = express.Router();
 
 var config = require('../config.json');
 var mongoose = require('mongoose');
-mongoose.connect(config.connectionString);
+db = mongoose.createConnection(config.connectionString);
 var Uutiset = require('../models/uutisetM');
 
 
@@ -49,7 +49,7 @@ router.get('/api/v1/uutinen', function (req, res) {
 
 
 
-    Uutiset.find({}, function (err, uutiset) {
+    Uutiset.find({}, {title: 1}, function (err, uutiset) {
         if (err) {
             res.send('uutisetn tuominen kusi');
         } else {

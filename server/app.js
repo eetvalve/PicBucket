@@ -9,19 +9,32 @@ var session = require('express-session');
 var expressJwt = require('express-jwt');
 var utf8 = require('utf8');
 var multer = require('multer');
+var fs = require('fs-extra');
+var grid = require("gridfs-stream");
+var mongoose = require('mongoose');
+var formidable = require("formidable");
+var async = require("async");
 
-var config = require('./config.json');
-
+var busboyBodyParser = require('busboy-body-parser');
 var uutiset = require('./routes/uutisetM');
 //var picUpload = require('./routes/picUpload');
-
+var config = require('./config.json');
 
 var app = express();
+
+
+
+
+mongoose.connect(config.connectionString);
+var conn = mongoose.connection;
 
 // view engine setup TAMA VAIHTUU SERVERIN VIEWSIIN LOGINIIN
 app.set('views', path.join(__dirname, '../', 'app'));
 app.set('view engine', 'ejs');
 
+
+//takes image-chunks from db and parse em.
+app.use(busboyBodyParser());
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -30,29 +43,136 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../', 'app')));
 
+
+
 var storage = multer.diskStorage({//multers disk storage settings
     destination: function (req, file, cb) {
-        cb(null, './uploads');
+
+        var pathh = './tmpImages/';
+        fs.mkdirsSync(pathh);
+        cb(null, pathh);
     },
     filename: function (req, file, cb) {
         var datetimestamp = Date.now();
-        cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
+        cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1])
     }
 });
 var upload = multer({//multer settings
     storage: storage
 }).single('file');
 /** API path that will upload the files */
+
+grid.mongo = mongoose.mongo;
+var gfs = grid(conn.db);
+
 app.post('/api/upload', function (req, res) {
-    upload(req, res, function (err) {
-        if (err) {
-            res.json({error_code: 1, err_desc: err});
-            return;
-        }
-        res.json({error_code: 0, err_desc: null});
-    })
+
+
+    var part = req.files.file;
+
+    var writeStream = gfs.createWriteStream({
+        filename: part.name,
+        metadata: {"objectId": part.name},
+        mode: 'w',
+        content_type: part.mimetype
+    });
+
+
+    writeStream.on('close', function () {
+        return res.status(200).send({
+            message: 'Success'
+        });
+    });
+
+    writeStream.write(part.data);
+
+    writeStream.end();
+
 });
 
+
+
+app.get('/api/upload', function (req, res) {
+
+    var arr = [];
+
+    gfs.files.find({}).toArray(function (err, files) {
+
+        if (files.length === 0) {
+            return res.status(400).send({
+                message: 'File not found'
+            });
+        }
+        console.log("FILES:");
+        console.log(files);
+
+        res.writeHead(200, {'Content-Type': files[0].contentType});
+
+        var i = 0;
+        async.each(files, function (file, next) {
+
+            file.position = i;
+            console.log("FILU");
+            console.log(file);
+
+            var readstream = gfs.createReadStream({
+                filename: file.filename
+            });
+
+            readstream.on('data', function (data) {
+                // res.write();
+              //  arr.push(data);
+                console.log("FILESatEnd:");
+                console.log(arr.length);
+
+
+                var json = JSON.stringify({
+                    data: data,
+                    filename: file.filename
+                });
+
+                res.write(data);
+                console.log("FILESatEnd toString:");
+                console.log(json.length);
+
+
+            });
+
+            readstream.on('error', function (err) {
+                console.log('An error occurred!', err);
+                throw err;
+            });
+            // i is increased because we need it on line 5
+            i++;
+            // the next() function is called when you
+            // want to move to the next item in the array
+            readstream.on('end', function () {
+                next();
+            });
+
+        }, function (err) {
+
+            res.end();
+            // all data has been updated
+            // do whatever you want
+        });
+
+    });
+
+});
+
+
+
+
+
+/*
+ router.get('/api/upload/:id', function(req, res) {
+ var readstream = gfs.createReadStream({
+ _id: req.params.id
+ });
+ readstream.pipe(res);
+ });
+ */
 /*
  app.use(session({ secret: config.secret, resave: false, saveUninitialized: true }));
  

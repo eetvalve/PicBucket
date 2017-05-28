@@ -77,4 +77,31 @@ angular.module('mainctrl', [])
                 };
 
 
+
+                $scope.pictureData = {};
+                $scope.pictureData2 = {};
+
+
+
+                // Get all todos
+                $http.get('/api/upload')
+                        .success(function (data) {
+
+                            
+                          // var apu = data.split(",");
+                           // console.log(data);
+
+                            $scope.pictureData = '/api/upload'+data;
+                           console.log(data);
+
+                            // $scope.pictureData2 = data;
+
+                        })
+                        .error(function (error) {
+                            console.log('Error: ' + error);
+                        });
+
+
+
+
             }]);
