@@ -2,7 +2,7 @@ var moment = require('moment');
 
 
 angular.module('mainctrl', [])
-        .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
+        .controller('MainCtrl', ['$scope', '$http', 'imageService', function ($scope, $http, imageService) {
 
                 $scope.day = moment.utc().format('DD-MM-YYYY');
 
@@ -78,19 +78,18 @@ angular.module('mainctrl', [])
 
 
 
-                $scope.pictureData = {};
-                $scope.pictureData2 = {};
 
 
 
-                // Fetch the picture list
-                $http.get('/picturelist/')
-                        .success(function (data) {
-                            $scope.pictureData = data;
-                            console.log(data);
-                        })
-                        .error(function (error) {
-                            console.log('Error: ' + error);
-                        });
+
+
+
+                $scope.picData = function () {
+                    imageService.getPics().then(function (data) {
+                        $scope.pictureData = data;
+                    });
+                };
+                
+                $scope.picData();
 
             }]);
