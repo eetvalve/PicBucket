@@ -1,41 +1,55 @@
 <h1>Images</h1>
 
 <div ng-controller="MainCtrl">
-    
+
     <div ng-repeat="name in names">{{name}}</div>
-    
-    
-    
 
 
 
-        <div class="todo-list-uutiset">
-            <ul class='uutisRajat' ng-repeat="todo in todoData">
-                <li>{{todo}}</li>
-            </ul>
+
+
+
+    <div class="todo-list-uutiset">
+        <ul class='uutisRajat' ng-repeat="todo in todoData">
+            <li>{{todo}}</li>
+        </ul>
+    </div>
+
+
+
+    <br>
+
+    <div class="todo-form">
+        <form>
+            <div class="form-group">
+                <input type="text" class="form-control input-md" placeholder="otsikko" ng-model="formData.title">
+                <textarea ng-model="formData.text" placeholder="teksti" style='width:550px'></textarea>
+
+            </div>
+            <button type="submit" class="btn btn-primary btn-md" ng-click="createTodo(formData.title, formData.text)">Julkaise</button>
+        </form>
+    </div>
+
+    <h3>Pictures</h3>
+    <!---->
+    <div>
+
+
+        <div ng-repeat="x in helperList">
+
+            <label><input type="checkbox" value="" ng-checked="downloadItems.indexOf(x) > -1"
+                          ng-click="toggleSelection(x)">Select image</label>
+
+            <img ng-src="{{x.data}}" width="300" height="300">
         </div>
+    </div>
+    
+    
+    <div class="selectedDownloadItem" ng-if="selectedDownloadItem">
+        <button class="btn btn-primary btn-sm" ng-click="download()">DOWNLOAD</button>
+        <button class="btn btn-primary btn-sm" ng-click="tag()">TAG</button>
+        <button class="btn btn-primary btn-sm" ng-click="favorite()">FAVORITE</button>
+        <button class="btn btn-warning btn-sm" ng-click="deletet()">DELETE</button>
+    </div>
 
-
-
-        <br>
-
-        <div class="todo-form">
-            <form>
-                <div class="form-group">
-                    <input type="text" class="form-control input-md" placeholder="otsikko" ng-model="formData.title">
-                    <textarea ng-model="formData.text" placeholder="teksti" style='width:550px'></textarea>
-
-                </div>
-                <button type="submit" class="btn btn-primary btn-md" ng-click="createTodo(formData.title, formData.text)">Julkaise</button>
-            </form>
-        </div>
-        
-        <h3>Pictures</h3>
-       <!---->
-       <div ng-repeat="x in pictureData.data">
-            <img ng-src="{{x}}" width="300" height="300">
-       </div>
-
-        
-      
 </div>
