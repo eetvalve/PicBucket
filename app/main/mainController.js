@@ -83,25 +83,14 @@ angular.module('mainctrl', [])
 
 
 
-                // Get all todos
-                $http.get('/api/upload')
+                // Fetch the picture list
+                $http.get('/picturelist/')
                         .success(function (data) {
-
-                            
-                          // var apu = data.split(",");
-                           // console.log(data);
-
-                            $scope.pictureData = '/api/upload'+data;
-                           console.log(data);
-
-                            // $scope.pictureData2 = data;
-
+                            $scope.pictureData = data;
+                            console.log(data);
                         })
                         .error(function (error) {
                             console.log('Error: ' + error);
                         });
-
-
-
 
             }]);

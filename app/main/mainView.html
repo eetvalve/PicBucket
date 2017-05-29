@@ -31,10 +31,11 @@
         </div>
         
         <h3>Pictures</h3>
-       
-       
-       
-       
-        <img ng-src="{{pictureData}}" width="300" height="300">
+       <!---->
+       <div ng-repeat="x in pictureData">
+            <img ng-src="{{x}}" width="300" height="300">
+       </div>
+
+        
       
 </div>

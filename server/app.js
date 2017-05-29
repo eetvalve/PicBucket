@@ -14,16 +14,12 @@ var grid = require("gridfs-stream");
 var mongoose = require('mongoose');
 var formidable = require("formidable");
 var async = require("async");
-
 var busboyBodyParser = require('busboy-body-parser');
 var uutiset = require('./routes/uutisetM');
 //var picUpload = require('./routes/picUpload');
 var config = require('./config.json');
 
 var app = express();
-
-
-
 
 mongoose.connect(config.connectionString);
 var conn = mongoose.connection;
@@ -65,8 +61,8 @@ var upload = multer({//multer settings
 grid.mongo = mongoose.mongo;
 var gfs = grid(conn.db);
 
-app.post('/api/upload', function (req, res) {
 
+app.post('/api/upload', function (req, res) {
 
     var part = req.files.file;
 
@@ -77,102 +73,49 @@ app.post('/api/upload', function (req, res) {
         content_type: part.mimetype
     });
 
-
     writeStream.on('close', function () {
         return res.status(200).send({
             message: 'Success'
         });
     });
 
-    writeStream.write(part.data);
+    writeStream.write(part.name);
 
     writeStream.end();
 
 });
-
-
-
-app.get('/api/upload', function (req, res) {
-
-    var arr = [];
-
+app.get('/picturelist/', function(req, res) {
     gfs.files.find({}).toArray(function (err, files) {
-
-        if (files.length === 0) {
-            return res.status(400).send({
-                message: 'File not found'
-            });
+        if (err) {
+            res.json(err);
         }
-        console.log("FILES:");
-        console.log(files);
-
-        res.writeHead(200, {'Content-Type': files[0].contentType});
-
-        var i = 0;
-        async.each(files, function (file, next) {
-
-            file.position = i;
-            console.log("FILU");
-            console.log(file);
-
-            var readstream = gfs.createReadStream({
-                filename: file.filename
-            });
-
-            readstream.on('data', function (data) {
-                // res.write();
-              //  arr.push(data);
-                console.log("FILESatEnd:");
-                console.log(arr.length);
-
-
-                var json = JSON.stringify({
-                    data: data,
-                    filename: file.filename
-                });
-
-                res.write(data);
-                console.log("FILESatEnd toString:");
-                console.log(json.length);
-
-
-            });
-
-            readstream.on('error', function (err) {
-                console.log('An error occurred!', err);
-                throw err;
-            });
-            // i is increased because we need it on line 5
-            i++;
-            // the next() function is called when you
-            // want to move to the next item in the array
-            readstream.on('end', function () {
-                next();
-            });
-
-        }, function (err) {
-
-            res.end();
-            // all data has been updated
-            // do whatever you want
-        });
-
+        if (files.length > 0) {
+            var array = [];
+            for (var i = 0; i < files.length; i++) {
+                array.push('pictures/' + files[i]._id);
+            }
+            res.send(array);
+        } else {
+            res.json('No files found');
+        }
     });
-
+});
+app.get('/pictures/:id', function(req, res) {
+    var picture_id = mongoose.Types.ObjectId(req.params.id.toString());
+    gfs.files.find({_id: picture_id}).toArray(function (err, files) {
+        if (err) {
+            res.json(err);
+        }
+        if (files.length > 0) {
+            res.writeHead(200, {'Content-Type': files[0].contentType});
+            var read_stream = gfs.createReadStream({_id: picture_id});
+            read_stream.pipe(res);
+        } else {
+            res.json('File Not Found');
+        }
+    });
 });
 
-
-
-
-
-/*
- router.get('/api/upload/:id', function(req, res) {
- var readstream = gfs.createReadStream({
- _id: req.params.id
- });
- readstream.pipe(res);
- });
- */
 /*
  app.use(session({ secret: config.secret, resave: false, saveUninitialized: true }));
  
