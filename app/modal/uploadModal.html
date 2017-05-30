@@ -5,25 +5,28 @@
             <input 
                type="file" 
                ngf-select 
-               ng-model="up.file" 
+               ng-model="up.files" 
+               ngf-multiple="true"
                name="file" 
                ngf-pattern="'image/*'"
                accept="image/*" 
                ngf-max-size="20MB" 
                />
-            Image thumbnail: <img style="width:100px;" ngf-thumbnail="up.file || '/thumb.jpg'"/>
+            <div ng-repeat="pic in up.files">
+            <img style="width:100px;" ngf-thumbnail="pic"/>
             <i ng-show="up.upload_form.file.$error.required">*required</i><br>
             <i ng-show="up.upload_form.file.$error.maxSize">File too large 
             {{up.file.size / 1000000|number:1}}MB: max 20M</i>
-            <button type="submit" ng-click="up.submit()">submit</button>
-            <p>{{up.progress}}
+            
+            <p>{{up.progress}}</p>
+            </div>
+            <button type="submit" ng-click="up.submit()" multiple="multiple">submit</button>
         </form>
 
   <!--multiply images  
   <div class="button" ngf-select ng-model="files" ngf-multiple="true">Select</div>
   Drop files: <div ngf-drop ng-model="files" class="drop-box">Drop</div>
   <button type="submit" ng-click="submit()">submit</button>
+  
+  <div class="button" ngf-select="uploadFiles($files)" multiple="multiple">Upload on file select</div>
   -->
-  
-  
- 

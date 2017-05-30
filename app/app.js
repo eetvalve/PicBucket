@@ -14,15 +14,18 @@ var moment2 = require('moment-business-days');
 require('ng-file-upload');
 
 
-//requiree angularin sisÃ¤iset omatekemÃ¤t UUUDET moduulit
+//controllers, requiree angularin sisÃ¤iset omatekemÃ¤t UUUDET moduulit
 require('./main/mainController');
 require('./search/searchController');
 require('./navigation/navigationController');
 require('./modal/uploadModalController');
 require('./modal/uploadModalDirective');
 
+//services
+require('./services/imageService');
+
 var app = angular.module('app', [ 'ui.bootstrap', 'ui.router', 'textAngular', 'ngFileUpload', 'mainctrl', 'searchctrl', 'navigationctrl', 'uploadmodalctrl',
-    'uploadmodaldirective']);
+    'uploadmodaldirective', 'imageService']);
 
 
 app.config(function ($stateProvider, $urlRouterProvider) {

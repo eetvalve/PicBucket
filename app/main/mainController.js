@@ -2,7 +2,7 @@ var moment = require('moment');
 
 
 angular.module('mainctrl', [])
-        .controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
+        .controller('MainCtrl', ['$scope', '$http', 'imageService', function ($scope, $http, imageService) {
 
                 $scope.day = moment.utc().format('DD-MM-YYYY');
 
@@ -78,19 +78,61 @@ angular.module('mainctrl', [])
 
 
 
-                $scope.pictureData = {};
-                $scope.pictureData2 = {};
 
 
 
-                // Fetch the picture list
-                $http.get('/picturelist/')
-                        .success(function (data) {
-                            $scope.pictureData = data;
-                            console.log(data);
-                        })
-                        .error(function (error) {
-                            console.log('Error: ' + error);
-                        });
+
+
+
+                $scope.picData = function () {
+                    imageService.getPics().then(function (data) {
+                        $scope.pictureData = data;
+
+                        console.log("kuvien data");
+                        console.log($scope.pictureData);
+
+                        $scope.helperList = [];
+
+                        
+
+                        for (var i = 0; i < $scope.pictureData.data.length; i++) {
+                            $scope.helperList.push({data: $scope.pictureData.data[i]});
+                        }
+
+
+                    });
+                };
+
+                $scope.picData();
+
+                $scope.downloadItems = [];
+
+                $scope.toggleSelection = function toggleSelection(x) {
+                    var idx = $scope.downloadItems.indexOf(x);
+
+                    // Is currently selected
+                    if (idx > -1) {
+                        $scope.downloadItems.splice(idx, 1);
+                        console.log('downloadItems');
+                        console.log($scope.downloadItems);
+                    }
+
+                    // Is newly selected
+                    else {
+                        $scope.downloadItems.push(x);
+
+                        console.log('downloadItems');
+                        console.log($scope.downloadItems);
+                    }
+                    
+                    //show div where the download button is, if some checkbox is 
+                    //selected.
+                    if($scope.downloadItems.length>0){
+                        $scope.selectedDownloadItem = true;
+                    }else{
+                        $scope.selectedDownloadItem = false;
+                    }
+                };
+
 
             }]);

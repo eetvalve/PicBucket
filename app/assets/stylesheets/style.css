@@ -26,3 +26,9 @@
   border-radius: 0;
   height: 100%;
 }
+.selectedDownloadItem{
+    background-color: lightgrey;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
