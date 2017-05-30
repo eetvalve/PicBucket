@@ -10,19 +10,16 @@ var expressJwt = require('express-jwt');
 var utf8 = require('utf8');
 var multer = require('multer');
 var fs = require('fs-extra');
-var grid = require("gridfs-stream");
 var mongoose = require('mongoose');
 var formidable = require("formidable");
 var async = require("async");
 var busboyBodyParser = require('busboy-body-parser');
 var uutiset = require('./routes/uutisetM');
-//var picUpload = require('./routes/picUpload');
+var picUpload = require('./routes/picUpload');
 var config = require('./config.json');
 
 var app = express();
 
-mongoose.connect(config.connectionString);
-var conn = mongoose.connection;
 
 // view engine setup TAMA VAIHTUU SERVERIN VIEWSIIN LOGINIIN
 app.set('views', path.join(__dirname, '../', 'app'));
@@ -58,63 +55,8 @@ var upload = multer({//multer settings
 }).single('file');
 /** API path that will upload the files */
 
-grid.mongo = mongoose.mongo;
-var gfs = grid(conn.db);
 
 
-app.post('/api/upload', function (req, res) {
-
-    var part = req.files.file;
-
-    var writeStream = gfs.createWriteStream({
-        filename: part.name,
-        metadata: {"objectId": part.name},
-        mode: 'w',
-        content_type: part.mimetype
-    });
-
-    writeStream.on('close', function () {
-        return res.status(200).send({
-            message: 'Success'
-        });
-    });
-
-    writeStream.write(part.name);
-
-    writeStream.end();
-
-});
-app.get('/picturelist/', function(req, res) {
-    gfs.files.find({}).toArray(function (err, files) {
-        if (err) {
-            res.json(err);
-        }
-        if (files.length > 0) {
-            var array = [];
-            for (var i = 0; i < files.length; i++) {
-                array.push('pictures/' + files[i]._id);
-            }
-            res.send(array);
-        } else {
-            res.json('No files found');
-        }
-    });
-});
-app.get('/pictures/:id', function(req, res) {
-    var picture_id = mongoose.Types.ObjectId(req.params.id.toString());
-    gfs.files.find({_id: picture_id}).toArray(function (err, files) {
-        if (err) {
-            res.json(err);
-        }
-        if (files.length > 0) {
-            res.writeHead(200, {'Content-Type': files[0].contentType});
-            var read_stream = gfs.createReadStream({_id: picture_id});
-            read_stream.pipe(res);
-        } else {
-            res.json('File Not Found');
-        }
-    });
-});
 
 /*
  app.use(session({ secret: config.secret, resave: false, saveUninitialized: true }));
@@ -135,7 +77,7 @@ app.get('/pictures/:id', function(req, res) {
  */
 
 app.use('/', uutiset);
-//app.use('/', picUpload);
+app.use('/', picUpload);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
