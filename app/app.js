@@ -19,13 +19,14 @@ require('./main/mainController');
 require('./search/searchController');
 require('./navigation/navigationController');
 require('./modal/uploadModalController');
+require('./modal/deleteModalController');
 require('./modal/uploadModalDirective');
 
 //services
 require('./services/imageService');
 
 var app = angular.module('app', [ 'ui.bootstrap', 'ui.router', 'textAngular', 'ngFileUpload', 'mainctrl', 'searchctrl', 'navigationctrl', 'uploadmodalctrl',
-    'uploadmodaldirective', 'imageService']);
+    'uploadmodaldirective', 'imageService', 'deletemodalctrl']);
 
 
 app.config(function ($stateProvider, $urlRouterProvider) {

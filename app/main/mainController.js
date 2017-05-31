@@ -2,7 +2,18 @@ var moment = require('moment');
 
 
 angular.module('mainctrl', [])
-        .controller('MainCtrl', ['$scope', '$http', 'imageService', function ($scope, $http, imageService) {
+        .controller('MainCtrl', ['$scope', '$http', 'imageService', '$uibModal', function ($scope, $http, imageService, $uibModal) {
+                
+                
+                $scope.openModal = function () {
+                    
+                    $scope.getArray();
+                    
+                    $uibModal.open({
+                        templateUrl: '../modal/deleteModal.html'
+                       
+                    });
+                };
 
                 $scope.day = moment.utc().format('DD-MM-YYYY');
 
@@ -85,21 +96,22 @@ angular.module('mainctrl', [])
 
 
                 $scope.picData = function () {
+                    
+                    $scope.pictureData = {};
+                    
                     imageService.getPics().then(function (data) {
-                        $scope.pictureData = data;
+                        $scope.pictureData = data.data;
 
                         console.log("kuvien data");
                         console.log($scope.pictureData);
 
-                        $scope.helperList = [];
+                       
 
-                        
-
-                        for (var i = 0; i < $scope.pictureData.data.length; i++) {
-                            $scope.helperList.push({data: $scope.pictureData.data[i]});
+                        if ($scope.pictureData === null) {
+                            $scope.picdataLength = false;
+                        } else {
+                            $scope.picdataLength = true;
                         }
-
-
                     });
                 };
 
@@ -108,7 +120,11 @@ angular.module('mainctrl', [])
                 $scope.downloadItems = [];
 
                 $scope.toggleSelection = function toggleSelection(x) {
-                    var idx = $scope.downloadItems.indexOf(x);
+
+
+                    
+
+                    var idx = $scope.downloadItems.indexOf(x.substring(10, x.length));
 
                     // Is currently selected
                     if (idx > -1) {
@@ -119,20 +135,47 @@ angular.module('mainctrl', [])
 
                     // Is newly selected
                     else {
-                        $scope.downloadItems.push(x);
+                        $scope.downloadItems.push(x.substring(10, x.length));
 
                         console.log('downloadItems');
                         console.log($scope.downloadItems);
                     }
-                    
+
                     //show div where the download button is, if some checkbox is 
                     //selected.
-                    if($scope.downloadItems.length>0){
+                    if ($scope.downloadItems.length > 0) {
                         $scope.selectedDownloadItem = true;
-                    }else{
+                    } else {
                         $scope.selectedDownloadItem = false;
                     }
                 };
 
+                $scope.download = function () {
+                    for (var i = 0; i < $scope.downloadItems.length; i++) {
+                        imageService.downloadPics($scope.downloadItems[i]);
+                    }
+                };
 
+                $scope.tag = function () {
+                    for (var i = 0; i < $scope.downloadItems.length; i++) {
+                        imageService.tagPics($scope.downloadItems[i]);
+                    }
+                };
+
+                $scope.favorite = function () {
+                    for (var i = 0; i < $scope.downloadItems.length; i++) {
+                        imageService.favoritePics($scope.downloadItems[i]);
+                    }
+                };
+
+                $scope.deletet = function () {
+                    for (var i = 0; i < $scope.downloadItems.length; i++) {
+                        imageService.deletetPics($scope.downloadItems[i]);
+                               
+                    } 
+                };
+                
+                 $scope.getArray = function () {
+                imageService.getArray($scope.downloadItems);
+                };
             }]);

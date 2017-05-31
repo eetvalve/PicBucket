@@ -4,7 +4,7 @@ var router = express.Router();
 var config = require('../config.json');
 var mongoose = require('mongoose');
 db = mongoose.createConnection(config.connectionString);
-var Uutiset = require('../models/uutisetM');
+
 var grid = require("gridfs-stream");
 
 
@@ -32,12 +32,12 @@ router.post('/api/upload', function (req, res) {
         });
     });
 
-    writeStream.write(part.name);
+    writeStream.write(part.data);
 
     writeStream.end();
 
 });
-router.get('/picturelist/', function(req, res) {
+router.get('/picturelist/', function (req, res) {
     gfs.files.find({}).toArray(function (err, files) {
         if (err) {
             res.json(err);
@@ -45,15 +45,15 @@ router.get('/picturelist/', function(req, res) {
         if (files.length > 0) {
             var array = [];
             for (var i = 0; i < files.length; i++) {
-                array.push('pictures/' + files[i]._id);
+                array.push('/pictures/' + files[i]._id);
             }
             res.send(array);
         } else {
-            res.json('No files found');
+            res.json(err);
         }
     });
 });
-router.get('/pictures/:id', function(req, res) {
+router.get('/pictures/:id', function (req, res) {
     var picture_id = mongoose.Types.ObjectId(req.params.id.toString());
     gfs.files.find({_id: picture_id}).toArray(function (err, files) {
         if (err) {
@@ -67,5 +67,33 @@ router.get('/pictures/:id', function(req, res) {
             res.json('File Not Found');
         }
     });
+});
+
+//delete pictures
+router.delete('/pictures/:id', function (req, res) {
+    var picture_id = mongoose.Types.ObjectId(req.params.id.toString());
+    gfs.remove({
+        _id: picture_id
+    }, function (err) {
+        if (err) {
+            res.send(err);
+        } else {
+            gfs.files.find({}).toArray(function (err, files) {
+                if (err) {
+                    res.json(err);
+                }
+                if (files.length > 0) {
+                    var array = [];
+                    for (var i = 0; i < files.length; i++) {
+                        array.push('/pictures/' + files[i]._id);
+                    }
+                    res.send(array);
+                }
+            });
+
+
+        }
+    });
+
 });
 module.exports = router;
