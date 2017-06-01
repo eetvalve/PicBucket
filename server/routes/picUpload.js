@@ -96,4 +96,59 @@ router.delete('/pictures/:id', function (req, res) {
     });
 
 });
+//update picture data 
+router.put('/pictures/:id', function (req, res) {
+    var picture_id = mongoose.Types.ObjectId(req.params.id.toString());
+    gfs.files.findById(picture_id, req.body, function (err, file) {
+
+        if (err) {
+
+            res.send(err);
+        } else {
+
+            file = req.body;
+
+            file.files.save(function (err) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    gfs.files.find({}).toArray(function (err, files) {
+                        if (err) {
+                            res.json(err);
+                        }
+                        if (files.length > 0) {
+                            var array = [];
+                            for (var i = 0; i < files.length; i++) {
+                                array.push('/pictures/' + files[i]._id);
+                            }
+                            res.send(array);
+                        }
+                    });
+                }
+
+            });
+
+
+            console.log(req.body);
+
+            var writeStream = gfs.createWriteStream({
+                filename: file.filename,
+                metadata: {"tags": req.body},
+                mode: 'w',
+                content_type: file.contentType
+            });
+
+            writeStream.on('close', function () {
+                return res.status(200).send({
+                    message: 'Success'
+                });
+            });
+
+            writeStream.write(file);
+
+            writeStream.end();
+        }
+    });
+
+});
 module.exports = router;

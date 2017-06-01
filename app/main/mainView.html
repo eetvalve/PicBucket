@@ -33,7 +33,7 @@
     <h3>Pictures</h3>
     <!---->
     <div ng-if="picdataLength" >
-        <div ng-repeat="x in imageDatat track by $index" style="float:left">
+        <div ng-repeat="x in imageDatat" style="float:left">
 
             <label><input type="checkbox" value="" ng-checked="downloadItems.indexOf(x) > -1"
                           ng-click="toggleSelection(x)">Select image</label>
@@ -45,7 +45,7 @@
     
     <div class="selectedDownloadItem" ng-if="selectedDownloadItem">
         <button class="btn btn-primary btn-sm" ng-click="download()">DOWNLOAD</button>
-        <button class="btn btn-primary btn-sm" ng-click="tag()">TAG</button>
+        <button class="btn btn-primary btn-sm" ng-click="tagModal()">TAG</button>
         <button class="btn btn-primary btn-sm" ng-click="favorite()">FAVORITE</button>
         <button class="btn btn-warning btn-sm" ng-click="openModal()">DELETE</button>
     </div>

@@ -1,9 +1,15 @@
-<div ng-controller="DeleteModalCtrl">
+<nav class="navbar navbar-default">
+<div class="delModal">
     <div style="float:left">
-        <button type="submit" ng-click="">Yes</button>
-        <button type="submit" ng-click="$ctrl.cancel()">No</button>
+        <h2>Do you want to delete {{deletesLength2}} images?</h2>
         
+        <button type="submit" ng-click="deletet()">Yes</button>
+        <button type="submit" ng-click="cancel()">No</button>
         
-        <button class="btn btn-warning btn-sm" ng-click="deletet()">DELETE</button>
+        <div ng-if="delTrue">
+        <button type="submit" ng-click="cancel()">Done</button>
+        </div>
+        
     </div>
 </div>
+</nav>

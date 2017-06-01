@@ -1,0 +1,24 @@
+<nav class="navbar navbar-default">
+    <div class="delModal">
+        <div style="float:left">
+            
+            <form name="myForm">
+                <h2>Add tags (seperate with tags with ','. Max 10 tags)</h2>
+                <input type="text" class="form-control input-md" name='namesInput' placeholder="add tags here.." ng-model="tagit" ng-list required>
+
+                <button type="submit" ng-click="tag(tagit)">Add tags</button>
+                <button type="submit" ng-click="cancel()">Cancel</button>
+
+                <div ng-if="delTrue">
+                    <button type="submit" ng-click="cancel()">Done</button>
+                </div>
+                <span role="alert">
+                    <span class="error" ng-show="myForm.namesInput.$error.required">
+                        Required!</span>
+                </span>
+            </form>
+
+
+        </div>
+    </div>
+</nav>

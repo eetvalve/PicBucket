@@ -29,21 +29,36 @@ angular.module('imageService', [])
                                 return data;
                             });
                 };
-                
+                var tagPics = function (todoID, data) {
+                    $http.put('/pictures/' + todoID, data)
+                            .success(function (data) {
+                                getPics();
+                                return data;
+                            })
+                            .error(function (data) {
+                                console.log('Error: ' + data);
+                                return data;
+                            });
+                };
+
+                var items = [];
+                var setArray = function () {
+                    console.log('set');
+                    console.log(items);
+                    return items;
+                };
                 var getArray = function (item) {
-                    
-                    var items = [];
-                    
-                    if (items.length === 0) {
-                        items.push(item);
-                        console.log(items);
-                        for (var i = 0; i < items.length; i++) {
-                            if (items[i] !== item) {
-                                items.push(item);
-                                console.log(items);
-                            }
-                        }
-                    }
+                    items = [];
+                    items.push(item);
+                    console.log(items);
+                };
+
+                var helperTable = [];
+                var setArray2 = function (table) {
+                    helperTable = table;
+                };
+                var getArray2 = function () {
+                    return helperTable;
                 };
 
 
@@ -51,7 +66,10 @@ angular.module('imageService', [])
                     getPics: getPics,
                     deletetPics: deletetPics,
                     getArray: getArray,
-                    items: getArray.items
+                    setArray: setArray,
+                    setArray2: setArray2,
+                    getArray2: getArray2,
+                    tagPics: tagPics
                 };
 
                 return {
@@ -60,11 +78,9 @@ angular.module('imageService', [])
                     }
                 };
 
-                return {
-                    tagPics: function () {
 
-                    }
-                };
+
+
 
                 return {
                     favoritePics: function () {

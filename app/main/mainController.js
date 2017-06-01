@@ -3,17 +3,31 @@ var moment = require('moment');
 
 angular.module('mainctrl', [])
         .controller('MainCtrl', ['$scope', '$http', 'imageService', '$uibModal', function ($scope, $http, imageService, $uibModal) {
-                
-                
+
+
                 $scope.openModal = function () {
-                    
+
                     $scope.getArray();
-                    
+
                     $uibModal.open({
-                        templateUrl: '../modal/deleteModal.html'
-                       
+                        animation: true,
+                        templateUrl: '../modal/deleteModal.html',
+                        controller: 'DeleteModalCtrl'
+
                     });
                 };
+                $scope.tagModal = function () {
+
+                    $scope.getArray();
+
+                    $uibModal.open({
+                        animation: true,
+                        templateUrl: '../modal/tagModal.html',
+                        controller: 'TagModalCtrl'
+
+                    });
+                };
+                
 
                 $scope.day = moment.utc().format('DD-MM-YYYY');
 
@@ -96,16 +110,16 @@ angular.module('mainctrl', [])
 
 
                 $scope.picData = function () {
-                    
+
                     $scope.pictureData = {};
-                    
+
                     imageService.getPics().then(function (data) {
                         $scope.pictureData = data.data;
 
                         console.log("kuvien data");
                         console.log($scope.pictureData);
 
-                       
+
 
                         if ($scope.pictureData === null) {
                             $scope.picdataLength = false;
@@ -117,12 +131,15 @@ angular.module('mainctrl', [])
 
                 $scope.picData();
 
-                $scope.downloadItems = [];
-
-                $scope.toggleSelection = function toggleSelection(x) {
 
 
-                    
+                $scope.$watch(function () {
+                    return imageService.getArray2();
+                }, function (value) {
+                    $scope.downloadItems = value;
+                });
+
+                $scope.toggleSelection = function (x) {
 
                     var idx = $scope.downloadItems.indexOf(x.substring(10, x.length));
 
@@ -171,11 +188,11 @@ angular.module('mainctrl', [])
                 $scope.deletet = function () {
                     for (var i = 0; i < $scope.downloadItems.length; i++) {
                         imageService.deletetPics($scope.downloadItems[i]);
-                               
-                    } 
+
+                    }
                 };
-                
-                 $scope.getArray = function () {
-                imageService.getArray($scope.downloadItems);
+
+                $scope.getArray = function () {
+                    imageService.getArray($scope.downloadItems);
                 };
             }]);
