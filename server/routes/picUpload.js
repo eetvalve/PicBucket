@@ -3,7 +3,6 @@ var router = express.Router();
 
 var config = require('../config.json');
 var mongoose = require('mongoose');
-db = mongoose.createConnection(config.connectionString);
 
 var grid = require("gridfs-stream");
 

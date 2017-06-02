@@ -16,6 +16,7 @@ var async = require("async");
 var busboyBodyParser = require('busboy-body-parser');
 var uutiset = require('./routes/uutisetM');
 var picUpload = require('./routes/picUpload');
+var picSearch = require('./routes/picSearch');
 var config = require('./config.json');
 
 var app = express();
@@ -78,6 +79,9 @@ var upload = multer({//multer settings
 
 app.use('/', uutiset);
 app.use('/', picUpload);
+app.use('/', picSearch);
+
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

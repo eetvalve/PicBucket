@@ -25,9 +25,10 @@ require('./modal/uploadModalDirective');
 
 //services
 require('./services/imageService');
+require('./services/searchService');
 
 var app = angular.module('app', [ 'ui.bootstrap', 'ui.router', 'textAngular', 'ngFileUpload', 'mainctrl', 'searchctrl', 'navigationctrl', 'uploadmodalctrl',
-    'uploadmodaldirective', 'imageService', 'deletemodalctrl', 'tagmodalctrl']);
+    'uploadmodaldirective', 'imageService', 'deletemodalctrl', 'tagmodalctrl', 'searchService']);
 
 
 app.config(function ($stateProvider, $urlRouterProvider) {
