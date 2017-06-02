@@ -62,6 +62,15 @@ angular.module('imageService', [])
                 };
 
 
+                downloadPics = function () {
+
+                };
+
+                favoritePics = function () {
+
+                };
+
+
                 return {
                     getPics: getPics,
                     deletetPics: deletetPics,
@@ -69,24 +78,14 @@ angular.module('imageService', [])
                     setArray: setArray,
                     setArray2: setArray2,
                     getArray2: getArray2,
-                    tagPics: tagPics
-                };
-
-                return {
-                    downloadPics: function () {
-
-                    }
+                    tagPics: tagPics,
+                    downloadPics: downloadPics,
+                    favoritePics: favoritePics
                 };
 
 
 
 
-
-                return {
-                    favoritePics: function () {
-
-                    }
-                };
 
 
 

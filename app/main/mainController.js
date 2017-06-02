@@ -4,7 +4,7 @@ var moment = require('moment');
 angular.module('mainctrl', [])
         .controller('MainCtrl', ['$scope', '$http', 'imageService', '$uibModal', function ($scope, $http, imageService, $uibModal) {
 
-
+                //delete pictures
                 $scope.openModal = function () {
 
                     $scope.getArray();
@@ -94,11 +94,7 @@ angular.module('mainctrl', [])
                     }
                 };
 
-                $scope.tag = function () {
-                    for (var i = 0; i < $scope.downloadItems.length; i++) {
-                        imageService.tagPics($scope.downloadItems[i]);
-                    }
-                };
+                
 
                 $scope.favorite = function () {
                     for (var i = 0; i < $scope.downloadItems.length; i++) {
@@ -106,12 +102,7 @@ angular.module('mainctrl', [])
                     }
                 };
 
-                $scope.deletet = function () {
-                    for (var i = 0; i < $scope.downloadItems.length; i++) {
-                        imageService.deletetPics($scope.downloadItems[i]);
-
-                    }
-                };
+               
 
                 $scope.getArray = function () {
                     imageService.getArray($scope.downloadItems);
