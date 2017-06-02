@@ -5,11 +5,18 @@
     <h3>Pictures</h3>
     <!---->
     <div ng-if="picdataLength" >
-        <div ng-repeat="x in imageDatat" style="float:left">
-
+        <div ng-repeat="x in pictureData" style="float:left">
+            
             <label><input type="checkbox" value="" ng-checked="downloadItems.indexOf(x) > -1"
                           ng-click="toggleSelection(x)">Select image</label>
-
+            
+            <div ng-show='favoriteTrue'>
+            <i class="fa fa-star" aria-hidden="true"></i>
+            </div>
+            <div ng-show="favoriteFalse">
+            <i class="fa fa-star-o" aria-hidden="true"></i>
+            </div>
+            
             <img ng-src="{{x}}" width="300" height="300">
         </div>
     </div>

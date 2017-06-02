@@ -20,7 +20,7 @@ router.post('/api/upload', function (req, res) {
 
     var writeStream = gfs.createWriteStream({
         filename: part.name,
-        metadata: {"objectId": part.name},
+        metadata: {"objectId": part.name, "tags": " ", "favorite": "edu"},
         mode: 'w',
         content_type: part.mimetype
     });
@@ -98,56 +98,63 @@ router.delete('/pictures/:id', function (req, res) {
 //update picture data 
 router.put('/pictures/:id', function (req, res) {
     var picture_id = mongoose.Types.ObjectId(req.params.id.toString());
-    gfs.files.findById(picture_id, req.body, function (err, file) {
 
+    gfs.files.findOne({_id: picture_id}, function (err, files) {
         if (err) {
+            res.json(err);
+        }
+        if (files.length > 0) {
+           var apu = [];
+           
+            apu.push(files.metadata.tags);
+            
+            var combine = apu.concat(req.body);
+            
+            
+            gfs.files.update({_id: picture_id}, {$set: {"metadata.tags": combine}}, function (err, file) {
 
-            res.send(err);
-        } else {
-
-            file = req.body;
-
-            file.files.save(function (err) {
                 if (err) {
                     res.send(err);
                 } else {
-                    gfs.files.find({}).toArray(function (err, files) {
-                        if (err) {
-                            res.json(err);
-                        }
-                        if (files.length > 0) {
-                            var array = [];
-                            for (var i = 0; i < files.length; i++) {
-                                array.push('/pictures/' + files[i]._id);
-                            }
-                            res.send(array);
-                        }
-                    });
+                    res.json(file);
+
                 }
-
             });
 
-
-            console.log(req.body);
-
-            var writeStream = gfs.createWriteStream({
-                filename: file.filename,
-                metadata: {"tags": req.body},
-                mode: 'w',
-                content_type: file.contentType
-            });
-
-            writeStream.on('close', function () {
-                return res.status(200).send({
-                    message: 'Success'
-                });
-            });
-
-            writeStream.write(file);
-
-            writeStream.end();
+        } else {
+            res.json('File Not Found');
         }
     });
+});
+//check if favorite
+router.put('/favorite/pictures/:id', function (req, res) {
+    var picture_id = mongoose.Types.ObjectId(req.params.id.toString());
 
+    gfs.files.findOne({_id: picture_id}, function (err, files) {
+        if (err) {
+            res.json(err);
+        }
+        if (files.length > 0) {
+           var apu = [];
+           
+            apu.push(files.metadata.favorite);
+            
+            var combine = apu.concat(req.body);
+            
+            
+            gfs.files.update({_id: picture_id}, {$set: {"metadata.favorite": combine}}, function (err, file) {
+
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.json(file);
+
+                }
+            });
+
+        } else {
+            res.json('File Not Found');
+        }
+    });
 });
 module.exports = router;

@@ -4,6 +4,11 @@ var moment = require('moment');
 angular.module('mainctrl', [])
         .controller('MainCtrl', ['$scope', '$http', 'imageService', '$uibModal', function ($scope, $http, imageService, $uibModal) {
 
+                $scope.favoriteTrue = false;
+                $scope.favoriteFalse = true;
+
+                $scope.usernamePlaceholder = "edu";
+
                 //delete pictures
                 $scope.openModal = function () {
 
@@ -27,7 +32,7 @@ angular.module('mainctrl', [])
 
                     });
                 };
-                
+
 
 
                 $scope.picData = function () {
@@ -47,17 +52,49 @@ angular.module('mainctrl', [])
                         } else {
                             $scope.picdataLength = true;
                         }
+
+
+
+                        for (var i = 0; i < $scope.pictureData.length; i++) {
+                            for (var y = 0; y < $scope.pictureData[i].metadata.favorite.length; y++) {
+                                if ($scope.pictureData[i][y].metadata.favorite === $scope.usernamePlaceholder) {
+                                    $scope.favoriteTrue = true;
+                                    $scope.favoriteFalse = false;
+
+                                    console.log("$scope.pictureData[i][y].metadata.favorite");
+                                    console.log($scope.pictureData[i][y].metadata.favorite);
+                                }
+                            }
+                        }
                     });
                 };
 
+
+
+                $scope.$watch(function () {
+                    return imageService.watchUpdate();
+                }, function (data) {
+
+                    $scope.pictureData = data;
+                    console.log($scope.pictureData);
+                });
+
                 $scope.picData();
 
-
+                $scope.check = {};
+                $scope.check.checkedBox = false;
 
                 $scope.$watch(function () {
                     return imageService.getArray2();
                 }, function (value) {
                     $scope.downloadItems = value;
+
+                });
+
+                $scope.$watch(function () {
+                    return imageService.getChecBox();
+                }, function (value) {
+
                 });
 
                 $scope.toggleSelection = function (x) {
@@ -94,7 +131,7 @@ angular.module('mainctrl', [])
                     }
                 };
 
-                
+
 
                 $scope.favorite = function () {
                     for (var i = 0; i < $scope.downloadItems.length; i++) {
@@ -102,7 +139,7 @@ angular.module('mainctrl', [])
                     }
                 };
 
-               
+
 
                 $scope.getArray = function () {
                     imageService.getArray($scope.downloadItems);

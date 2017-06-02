@@ -24,10 +24,11 @@ angular.module('tagmodalctrl', [])
                     console.log($scope.pictureData);
 
                     for (var i = 0; i < $scope.pictureData[0].length; i++) {
-                        imageService.tagPics($scope.pictureData[0][i], tagTable);
+                        imageService.tagPics($scope.pictureData[0][i], tags);
                     }
                     var table = [];
-                    imageService.setArray2(table);
+                    var checkedBox = false;
+                    imageService.setArray2(table, checkedBox);
                     
                     return $scope.delTrue = true;
                 };

@@ -1,6 +1,8 @@
 angular.module('imageService', [])
         .factory('imageService', ['$rootScope', '$http', function ($rootScope, $http) {
 
+                var dataCarrier;
+
                 var getPics = function () {
                     return $http.get('/picturelist/')
                             .success(function (data) {
@@ -9,9 +11,9 @@ angular.module('imageService', [])
                                 //that would help you to continue promise chain.
                                 console.log(data);
 
-                                $rootScope.imageDatat = data;
+                                dataCarrier = data;
 
-                                return $rootScope.imageDatat;
+                                return data;
 
                             }).error(function (data) {
                         console.log('Error: ' + data);
@@ -21,7 +23,8 @@ angular.module('imageService', [])
 
                     $http.delete('/pictures/' + todoID)
                             .success(function (data) {
-                                getPics();
+
+                                setUpdate();
                                 return data;
                             })
                             .error(function (data) {
@@ -30,9 +33,12 @@ angular.module('imageService', [])
                             });
                 };
                 var tagPics = function (todoID, data) {
+
+                    console.log(data);
+
                     $http.put('/pictures/' + todoID, data)
                             .success(function (data) {
-                                getPics();
+                                setUpdate();
                                 return data;
                             })
                             .error(function (data) {
@@ -54,11 +60,17 @@ angular.module('imageService', [])
                 };
 
                 var helperTable = [];
-                var setArray2 = function (table) {
+                var checkBox = false;
+                var setArray2 = function (table, checkedBox) {
                     helperTable = table;
+                    checkBox = checkedBox;
                 };
                 var getArray2 = function () {
                     return helperTable;
+                };
+
+                var getChecBox = function () {
+                    return checkBox;
                 };
 
 
@@ -66,8 +78,26 @@ angular.module('imageService', [])
 
                 };
 
-                favoritePics = function () {
+                favoritePics = function (todoID, data) {
+                    console.log(data);
 
+                    $http.put('/favorite/pictures/' + todoID, data)
+                            .success(function (data) {
+                                setUpdate();
+                                return data;
+                            })
+                            .error(function (data) {
+                                console.log('Error: ' + data);
+                                return data;
+                            });
+                };
+
+                watchUpdate = function () {
+                    return dataCarrier;
+                };
+
+                setUpdate = function () {
+                    getPics();
                 };
 
 
@@ -80,7 +110,10 @@ angular.module('imageService', [])
                     getArray2: getArray2,
                     tagPics: tagPics,
                     downloadPics: downloadPics,
-                    favoritePics: favoritePics
+                    favoritePics: favoritePics,
+                    getChecBox: getChecBox,
+                    watchUpdate: watchUpdate,
+                    setUpdate: setUpdate
                 };
 
 
