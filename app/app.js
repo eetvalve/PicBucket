@@ -13,6 +13,10 @@ require('angular-dynamic-locale');
 var moment2 = require('moment-business-days');
 require('ng-file-upload');
 
+var ngFileSaver = require('angular-file-saver');
+
+
+
 
 //controllers, requiree angularin sisÃ¤iset omatekemÃ¤t UUUDET moduulit
 require('./main/mainController');
@@ -27,7 +31,7 @@ require('./modal/uploadModalDirective');
 require('./services/imageService');
 require('./services/searchService');
 
-var app = angular.module('app', [ 'ui.bootstrap', 'ui.router', 'textAngular', 'ngFileUpload', 'mainctrl', 'searchctrl', 'navigationctrl', 'uploadmodalctrl',
+var app = angular.module('app', [ 'ui.bootstrap', 'ui.router', 'textAngular', 'ngFileUpload', 'ngFileSaver', 'mainctrl', 'searchctrl', 'navigationctrl', 'uploadmodalctrl',
     'uploadmodaldirective', 'imageService', 'deletemodalctrl', 'tagmodalctrl', 'searchService']);
 
 

@@ -104,13 +104,13 @@ router.put('/pictures/:id', function (req, res) {
             res.json(err);
         }
         if (files.length > 0) {
-           var apu = [];
-           
+            var apu = [];
+
             apu.push(files.metadata.tags);
-            
+
             var combine = apu.concat(req.body);
-            
-            
+
+
             gfs.files.update({_id: picture_id}, {$set: {"metadata.tags": combine}}, function (err, file) {
 
                 if (err) {
@@ -135,13 +135,13 @@ router.put('/favorite/pictures/:id', function (req, res) {
             res.json(err);
         }
         if (files.length > 0) {
-           var apu = [];
-           
+            var apu = [];
+
             apu.push(files.metadata.favorite);
-            
+
             var combine = apu.concat(req.body);
-            
-            
+
+
             gfs.files.update({_id: picture_id}, {$set: {"metadata.favorite": combine}}, function (err, file) {
 
                 if (err) {
@@ -157,4 +157,39 @@ router.put('/favorite/pictures/:id', function (req, res) {
         }
     });
 });
+//download image to hardrive
+router.get('/download/pictures/:id', function (req, res) {
+
+    var picture_id = mongoose.Types.ObjectId(req.params.id.toString());
+    gfs.files.find({_id: picture_id}).toArray(function (err, files) {
+
+        if (files.length === 0) {
+            return res.status(400).send({
+                message: 'File not found'
+            });
+        }
+
+        res.writeHead(200, {'Content-Type': files[0].contentType});
+
+        var readstream = gfs.createReadStream({
+            filename: files[0].filename
+        });
+
+        readstream.on('data', function (data) {
+            
+            res.write(data);
+        
+        });
+
+        readstream.on('end', function () {
+            res.end();
+        });
+
+        readstream.on('error', function (err) {
+            console.log('An error occurred!', err);
+            throw err;
+        });
+    });
+});
+
 module.exports = router;

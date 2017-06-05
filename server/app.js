@@ -23,8 +23,8 @@ var app = express();
 
 
 // view engine setup TAMA VAIHTUU SERVERIN VIEWSIIN LOGINIIN
-app.set('views', path.join(__dirname, '../app'));
-app.set('view engine', 'jade');
+app.set('views', path.join(__dirname, '../', 'app'));
+app.set('view engine', 'ejs');
 
 
 //takes image-chunks from db and parse em.
@@ -35,7 +35,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '../app')));
+app.use(express.static(path.join(__dirname, '../', 'app')));
 
 
 

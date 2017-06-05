@@ -2,7 +2,7 @@ var moment = require('moment');
 
 
 angular.module('mainctrl', [])
-        .controller('MainCtrl', ['$scope', '$http', 'imageService', '$uibModal', function ($scope, $http, imageService, $uibModal) {
+        .controller('MainCtrl', ['$scope', '$http', 'imageService', '$uibModal', 'FileSaver', 'Blob', function ($scope, $http, imageService, $uibModal, FileSaver, Blob) {
 
                 $scope.favoriteTrue = false;
                 $scope.favoriteFalse = true;

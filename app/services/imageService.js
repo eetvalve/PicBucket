@@ -1,5 +1,5 @@
 angular.module('imageService', [])
-        .factory('imageService', ['$rootScope', '$http', function ($rootScope, $http) {
+        .factory('imageService', ['$rootScope', '$http', 'FileSaver', 'Blob', function ($rootScope, $http, FileSaver, Blob) {
 
                 var dataCarrier;
 
@@ -74,8 +74,16 @@ angular.module('imageService', [])
                 };
 
 
-                downloadPics = function () {
-
+                downloadPics = function (todoId) {
+                    $http.get('/download/pictures/' + todoId, {responseType: 'blob'})
+                            .then(function (results) {
+                                var data = results.data;
+                                var blob = new Blob(
+                                        [data],
+                                        {type: "image/png"}
+                                );
+                                FileSaver.saveAs(blob, todoId+".png");
+                            });
                 };
 
                 favoritePics = function (todoID, data) {
