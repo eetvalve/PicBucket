@@ -44,7 +44,8 @@ router.get('/picturelist/', function (req, res) {
         if (files.length > 0) {
             var array = [];
             for (var i = 0; i < files.length; i++) {
-                array.push('/pictures/' + files[i]._id);
+                var arr = ['/pictures/' + files[i]._id, files[i].metadata.tags];
+                array.push(arr);
             }
             res.send(array);
         } else {
@@ -99,30 +100,12 @@ router.delete('/pictures/:id', function (req, res) {
 router.put('/pictures/:id', function (req, res) {
     var picture_id = mongoose.Types.ObjectId(req.params.id.toString());
 
-    gfs.files.findOne({_id: picture_id}, function (err, files) {
+     gfs.files.update({_id: picture_id}, {$set: {"metadata.tags": req.body}}, function (err, file) {
         if (err) {
-            res.json(err);
-        }
-        if (files.length > 0) {
-            var apu = [];
-
-            apu.push(files.metadata.tags);
-
-            var combine = apu.concat(req.body);
-
-
-            gfs.files.update({_id: picture_id}, {$set: {"metadata.tags": combine}}, function (err, file) {
-
-                if (err) {
-                    res.send(err);
-                } else {
-                    res.json(file);
-
-                }
-            });
-
+            res.send(err);
         } else {
-            res.json('File Not Found');
+            res.json(file);
+
         }
     });
 });

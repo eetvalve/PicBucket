@@ -1,13 +1,36 @@
 var moment = require('moment');
 
-
 angular.module('mainctrl', [])
-        .controller('MainCtrl', ['$scope', '$http', 'imageService', '$uibModal', 'FileSaver', 'Blob', function ($scope, $http, imageService, $uibModal, FileSaver, Blob) {
+        .filter('filterByTable', function() {
+          return function(input,searchResultArray) {
+            var arr = [];
+            if(typeof searchResultArray != "string") {
+                for (var n = 0; n < input.length; n++) {
+                    var b_doesnthavetags = false;
+                    for (var i = 0; i < searchResultArray.length; i++) {
+                        if (input[n][1].indexOf(searchResultArray[i]) == -1)
+                            b_doesnthavetags = true;
+                    }
+                    if (!b_doesnthavetags)
+                        arr.push(input[n]);
+                }
+            }else{
+                for (var i = 0; i < input.length; i++) {
+                    if (input[i][1].indexOf(searchResultArray.trim()) != -1||searchResultArray.trim()=="")
+                        arr.push(input[i]);
+                }
+            }
+            return arr;
+          };
+        })
+        .controller('MainCtrl', ['$scope', '$http', 'searchService', 'imageService', '$uibModal', 'FileSaver', 'Blob', function ($scope, $http, searchService,imageService, $uibModal, FileSaver, Blob) {
+
 
                 $scope.favoriteTrue = false;
                 $scope.favoriteFalse = true;
 
-                $scope.usernamePlaceholder = "edu";
+                $scope.usernamePlaceholder = "wat";
+                $scope.searchResultArray = [];
 
                 //delete pictures
                 $scope.openModal = function () {
@@ -32,8 +55,6 @@ angular.module('mainctrl', [])
 
                     });
                 };
-
-
 
                 $scope.picData = function () {
 
@@ -98,8 +119,8 @@ angular.module('mainctrl', [])
                 });
 
                 $scope.toggleSelection = function (x) {
-
-                    var idx = $scope.downloadItems.indexOf(x.substring(10, x.length));
+                    //x[0] = x[0].substring(10, x[0].length);
+                    var idx = $scope.downloadItems.indexOf(x);
 
                     // Is currently selected
                     if (idx > -1) {
@@ -110,7 +131,7 @@ angular.module('mainctrl', [])
 
                     // Is newly selected
                     else {
-                        $scope.downloadItems.push(x.substring(10, x.length));
+                        $scope.downloadItems.push(x);
 
                         console.log('downloadItems');
                         console.log($scope.downloadItems);
@@ -127,7 +148,7 @@ angular.module('mainctrl', [])
 
                 $scope.download = function () {
                     for (var i = 0; i < $scope.downloadItems.length; i++) {
-                        imageService.downloadPics($scope.downloadItems[i]);
+                        imageService.downloadPics($scope.downloadItems[i][0].substring(10, $scope.downloadItems[i][0].length));
                     }
                 };
 
@@ -135,13 +156,27 @@ angular.module('mainctrl', [])
 
                 $scope.favorite = function () {
                     for (var i = 0; i < $scope.downloadItems.length; i++) {
-                        imageService.favoritePics($scope.downloadItems[i]);
+                        imageService.favoritePics($scope.downloadItems[i][0].substring(10, $scope.downloadItems[i][0].length));
                     }
                 };
-
 
 
                 $scope.getArray = function () {
                     imageService.getArray($scope.downloadItems);
                 };
+                var tabl = [];
+                $scope.searchResult = searchService.getSearchResult();
+                searchService.ApplyForUpdates($scope);
+                $scope.$watch('searchResult', function() {
+                    var tabl = $scope.searchResult.toString().split(",");
+                    if (tabl.length>1) {
+                        $scope.searchResultArray = [];
+                        for (var i = 0; i < tabl.length; i++) {
+                            var str = tabl[i].trim();
+                            $scope.searchResultArray.push(str);
+                        }
+                    }else{
+                        $scope.searchResultArray = $scope.searchResult
+                    }
+                 }, true);
             }]);

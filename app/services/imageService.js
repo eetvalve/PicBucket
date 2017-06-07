@@ -36,7 +36,7 @@ angular.module('imageService', [])
 
                     console.log(data);
 
-                    $http.put('/pictures/' + todoID, data)
+                    $http.put(todoID, data)
                             .success(function (data) {
                                 setUpdate();
                                 return data;
@@ -74,7 +74,7 @@ angular.module('imageService', [])
                 };
 
 
-                downloadPics = function (todoId) {
+                var downloadPics = function (todoId) {
                     $http.get('/download/pictures/' + todoId, {responseType: 'blob'})
                             .then(function (results) {
                                 var data = results.data;
@@ -86,7 +86,7 @@ angular.module('imageService', [])
                             });
                 };
 
-                favoritePics = function (todoID, data) {
+                var favoritePics = function (todoID, data) {
                     console.log(data);
 
                     $http.put('/favorite/pictures/' + todoID, data)
@@ -100,11 +100,11 @@ angular.module('imageService', [])
                             });
                 };
 
-                watchUpdate = function () {
+                var watchUpdate = function () {
                     return dataCarrier;
                 };
 
-                setUpdate = function () {
+                var setUpdate = function () {
                     getPics();
                 };
 
@@ -123,14 +123,5 @@ angular.module('imageService', [])
                     watchUpdate: watchUpdate,
                     setUpdate: setUpdate
                 };
-
-
-
-
-
-
-
-
-
 
             }]);
