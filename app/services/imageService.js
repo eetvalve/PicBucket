@@ -34,9 +34,8 @@ angular.module('imageService', [])
                 };
                 var tagPics = function (todoID, data) {
 
-                    console.log(data);
 
-                    $http.put(todoID, data)
+                    $http.put('/pictures/' + todoID, data)
                             .success(function (data) {
                                 setUpdate();
                                 return data;
@@ -85,7 +84,9 @@ angular.module('imageService', [])
                                 FileSaver.saveAs(blob, todoId+".png");
                             });
                 };
-
+                var getTags = function (todoID) {
+                    return $http.get('/tags/' + todoID.toString());
+                };
                 var favoritePics = function (todoID, data) {
                     console.log(data);
 
@@ -121,7 +122,8 @@ angular.module('imageService', [])
                     favoritePics: favoritePics,
                     getChecBox: getChecBox,
                     watchUpdate: watchUpdate,
-                    setUpdate: setUpdate
+                    setUpdate: setUpdate,
+                    getTags: getTags
                 };
 
             }]);

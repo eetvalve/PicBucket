@@ -20,7 +20,7 @@ router.post('/api/upload', function (req, res) {
 
     var writeStream = gfs.createWriteStream({
         filename: part.name,
-        metadata: {"objectId": part.name, "tags": " ", "favorite": "edu"},
+        metadata: {"objectId": part.name, "tags": [], "favorite": "edu"},
         mode: 'w',
         content_type: part.mimetype
     });
@@ -44,8 +44,7 @@ router.get('/picturelist/', function (req, res) {
         if (files.length > 0) {
             var array = [];
             for (var i = 0; i < files.length; i++) {
-                var arr = ['/pictures/' + files[i]._id, files[i].metadata.tags];
-                array.push(arr);
+                array.push(files[i]._id);
             }
             res.send(array);
         } else {
@@ -63,6 +62,21 @@ router.get('/pictures/:id', function (req, res) {
             res.writeHead(200, {'Content-Type': files[0].contentType});
             var read_stream = gfs.createReadStream({_id: picture_id});
             read_stream.pipe(res);
+        } else {
+            res.json('File Not Found');
+        }
+    });
+});
+
+// Get the tags of a picture
+router.get('/tags/:id', function (req, res) {
+    var picture_id = mongoose.Types.ObjectId(req.params.id.toString());
+    gfs.files.find({_id: picture_id}).toArray(function (err, files) {
+        if (err) {
+            res.json(err);
+        }
+        if (files.length > 0) {
+            res.send(files[0].metadata.tags);
         } else {
             res.json('File Not Found');
         }

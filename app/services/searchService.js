@@ -12,6 +12,12 @@ angular.module('searchService', [])
                 var ApplyForUpdates = function(input) {
                     $rootScope.updateList = input;
                 };
+                var updateSearchbarButtons = function() {
+                    $rootScope.searchController.CalculateNewButtons();
+                };
+                var sendControllerScope = function(scope) {
+                    $rootScope.searchController = scope;
+                };
                 var addSearchTag = function(input,scope){
                     var inp = input.toString();
                     var str = $rootScope.searchResult;
@@ -51,7 +57,9 @@ angular.module('searchService', [])
                     getSearchResult: getSearchResult,
                     setSearchResult: setSearchResult,
                     ApplyForUpdates: ApplyForUpdates,
-                    addSearchTag: addSearchTag
+                    addSearchTag: addSearchTag,
+                    sendControllerScope: sendControllerScope,
+                    updateSearchbarButtons: updateSearchbarButtons
                 };
 
 

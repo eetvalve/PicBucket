@@ -2,26 +2,32 @@ var moment = require('moment');
 
 angular.module('mainctrl', [])
         .filter('filterByTable', function() {
-          return function(input,searchResultArray) {
-            var arr = [];
-            if(typeof searchResultArray != "string") {
-                for (var n = 0; n < input.length; n++) {
-                    var b_doesnthavetags = false;
-                    for (var i = 0; i < searchResultArray.length; i++) {
-                        if (input[n][1].indexOf(searchResultArray[i]) == -1)
-                            b_doesnthavetags = true;
-                    }
-                    if (!b_doesnthavetags)
-                        arr.push(input[n]);
-                }
-            }else{
+            return function(input,searchResultArray,pictureTags,selectedItems) {
+                var arr = [];
+                if (typeof(searchResultArray) == "string") 
+                    searchResultArray = [searchResultArray];
                 for (var i = 0; i < input.length; i++) {
-                    if (input[i][1].indexOf(searchResultArray.trim()) != -1||searchResultArray.trim()=="")
+                    var pass = 0;
+                    for (var n = 0; n < searchResultArray.length; n++) {
+                        for (var k = 0; k < pictureTags[input[i]].length; k++) {
+                            var str = pictureTags[input[i]][k]
+                            var patt = RegExp(searchResultArray[n], 'i');
+                            if (patt.test(str)&&searchResultArray[n].trim()!="") {
+                                pass++;
+                            }
+                        }
+                        if(searchResultArray[n].trim()=="") 
+                            pass++;
+                    }
+                    if (pass>=searchResultArray.length) 
                         arr.push(input[i]);
                 }
+                for (var i = 0; i < selectedItems.length; i++) {
+                    if(arr.indexOf(selectedItems[i])==-1)
+                        arr.push(selectedItems[i]);
+                }
+                return arr;
             }
-            return arr;
-          };
         })
         .controller('MainCtrl', ['$scope', '$http', 'searchService', 'imageService', '$uibModal', 'FileSaver', 'Blob', function ($scope, $http, searchService,imageService, $uibModal, FileSaver, Blob) {
 
@@ -31,7 +37,7 @@ angular.module('mainctrl', [])
 
                 $scope.usernamePlaceholder = "wat";
                 $scope.searchResultArray = [];
-
+                $scope.pictureTags = {};
                 //delete pictures
                 $scope.openModal = function () {
 
@@ -55,25 +61,36 @@ angular.module('mainctrl', [])
 
                     });
                 };
-
+                $scope.updateTagTable = function() {
+                    if ($scope.pictureData) {
+                        for (var i = 0; i < $scope.pictureData.length; i++) {
+                                $scope.pictureTags[$scope.pictureData[i]] = [];
+                        }
+                        var i = 0;
+                        for (var i = 0; i < $scope.pictureData.length; i++) {
+                            imageService.getTags($scope.pictureData[i]).then(function (_tags) {
+                                var str = _tags.config.url;
+                                str = str.slice(6, str.length);
+                                $scope.pictureTags[str] = _tags.data;
+                            });
+                        }
+                    }
+                }
                 $scope.picData = function () {
 
                     $scope.pictureData = {};
 
                     imageService.getPics().then(function (data) {
                         $scope.pictureData = data.data;
-
-                        console.log("kuvien data");
-                        console.log($scope.pictureData);
-
-
-
+                        $scope.updateTagTable();
+                        //console.log("kuvien data");
+                        //console.log($scope.pictureData);
                         if ($scope.pictureData === null) {
                             $scope.picdataLength = false;
                         } else {
                             $scope.picdataLength = true;
                         }
-
+                        
 
 
                         for (var i = 0; i < $scope.pictureData.length; i++) {
@@ -82,22 +99,21 @@ angular.module('mainctrl', [])
                                     $scope.favoriteTrue = true;
                                     $scope.favoriteFalse = false;
 
-                                    console.log("$scope.pictureData[i][y].metadata.favorite");
-                                    console.log($scope.pictureData[i][y].metadata.favorite);
+                                    //console.log("$scope.pictureData[i][y].metadata.favorite");
+                                    //console.log($scope.pictureData[i][y].metadata.favorite);
                                 }
                             }
                         }
                     });
                 };
 
-
-
                 $scope.$watch(function () {
                     return imageService.watchUpdate();
                 }, function (data) {
 
                     $scope.pictureData = data;
-                    console.log($scope.pictureData);
+                    $scope.updateTagTable()
+                    //console.log($scope.pictureData);
                 });
 
                 $scope.picData();
@@ -125,16 +141,16 @@ angular.module('mainctrl', [])
                     // Is currently selected
                     if (idx > -1) {
                         $scope.downloadItems.splice(idx, 1);
-                        console.log('downloadItems');
-                        console.log($scope.downloadItems);
+                        //console.log('downloadItems');
+                        //console.log($scope.downloadItems);
                     }
 
                     // Is newly selected
                     else {
                         $scope.downloadItems.push(x);
 
-                        console.log('downloadItems');
-                        console.log($scope.downloadItems);
+                        //console.log('downloadItems');
+                        //console.log($scope.downloadItems);
                     }
 
                     //show div where the download button is, if some checkbox is 
@@ -148,7 +164,7 @@ angular.module('mainctrl', [])
 
                 $scope.download = function () {
                     for (var i = 0; i < $scope.downloadItems.length; i++) {
-                        imageService.downloadPics($scope.downloadItems[i][0].substring(10, $scope.downloadItems[i][0].length));
+                        imageService.downloadPics($scope.downloadItems[i]);
                     }
                 };
 
@@ -156,7 +172,7 @@ angular.module('mainctrl', [])
 
                 $scope.favorite = function () {
                     for (var i = 0; i < $scope.downloadItems.length; i++) {
-                        imageService.favoritePics($scope.downloadItems[i][0].substring(10, $scope.downloadItems[i][0].length));
+                        imageService.favoritePics($scope.downloadItems[i]);
                     }
                 };
 

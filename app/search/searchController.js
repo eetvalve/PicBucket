@@ -11,21 +11,36 @@ angular.module('searchctrl', [])
 		$scope.setSearch = function (input) {
 			searchService.addSearchTag(input,$scope);
 		};
-		$scope.pictureData = {};
-		imageService.getPics().then(function (data) {
-			$scope.pictureData = data.data;
-			var tagList = [];
-			for (var i = 0; i < $scope.pictureData.length; i++) {
-				for (var k = 0; k < $scope.pictureData[i][1].length; k++) {
-					var str = $scope.pictureData[i][1][k].trim();
-						tagList.push(str);
+		$scope.CalculateNewButtons = function() {
+			$scope.pictures = {};
+			$scope.tagList = [];
+			var _i = 0;
+			imageService.getPics().then(function (data) {
+				$scope.pictures = data.data;
+				for (var i = 0; i < $scope.pictures.length; i++) {
+					imageService.getTags($scope.pictures[i]).then(function (_tags) {
+						var imageTags = _tags.data;
+						for (var i=0; i<imageTags.length; i++) {
+							$scope.tagList.push(imageTags[i]);
+						}
+						_i++;
+						if (_i==$scope.pictures.length) {
+							updateButtons(); // Lets build the buttons after we get all the tags!
+						}
+					});
+
 				}
-			}
+			});
+		}
+		searchService.sendControllerScope($scope);
+		$scope.CalculateNewButtons();
+		var updateButtons = function() {
 			var output = [];
-			tagList.sort();
-			for (var i=0; i<tagList.length; i++) {
-			    if (!output[output.length-1] || output[output.length-1].value != tagList[i])
-			        output.push({value: tagList[i], times: 1})
+			$scope.commonTags = [];
+			$scope.tagList.sort();
+			for (var i=0; i<$scope.tagList.length; i++) {
+			    if (!output[output.length-1] || output[output.length-1].value != $scope.tagList[i])
+			        output.push({value: $scope.tagList[i], times: 1})
 			    else
 			        output[output.length-1].times++;
 			}
@@ -36,5 +51,5 @@ angular.module('searchctrl', [])
 				if (output[i].value != "")
 					$scope.commonTags.push(output[i].value);
 			}
-        });
+        }
 	}]);
