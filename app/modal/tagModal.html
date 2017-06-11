@@ -4,7 +4,7 @@
             
             <form name="myForm">
                 <h2>Add tags (seperate with tags with ','. Max 10 tags)</h2>
-                <input type="text" class="form-control input-md" name='namesInput' placeholder="add tags here.." ng-model="tagit" ng-list required>
+                <input type="text" class="form-control input-md" name='namesInput' placeholder="add tags here.." ng-model="tagit" ng-value="picTags" ng-list >
 
                 <button type="submit" ng-click="tag(tagit)">Add tags</button>
                 <button type="submit" ng-click="cancel()">Cancel</button>
