@@ -33,55 +33,144 @@
     width: 100%;
 }
 
+/*----------- Normal Text --------------*/
+p{
+    font-family: "Amatic SC";
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 33px;  
+}
+
+/*--------- Upload Control -----------*/
+.upForm{
+    text-align: center;
+    margin: 10px;
+}
+
+.upInput{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px; 
+    overflow: auto; 
+}
+
+.BtnForm{
+    font-family: "Amatic SC";
+    font-size: 18px;
+    font-weight: bold;
+
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: block;
+    
+    border : solid 1px #f0f0f0;
+    border-radius : 3px;
+    moz-border-radius : 3px;
+    -webkit-box-shadow : 0px 0px 5px rgba(0,0,0,0.5);
+    -moz-box-shadow : 0px 0px 5px rgba(0,0,0,0.5);
+    box-shadow : 0px 0px 5px rgba(0,0,0,0.5);
+    padding : 1px 10px;
+
+    color : #000000;
+    background : #ffffff;
+    background : -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#cacbcc));
+    background : -moz-linear-gradient(top, #ffffff 0%, #cacbcc 100%);
+    background : -webkit-linear-gradient(top, #ffffff 0%, #cacbcc 100%);
+    background : -o-linear-gradient(top, #ffffff 0%, #cacbcc 100%);
+    background : -ms-linear-gradient(top, #ffffff 0%, #cacbcc 100%);
+    background : linear-gradient(top, #ffffff 0%, #cacbcc 100%);
+    filter : progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#cacbcc',GradientType=0 );    
+}
+
+.BtnForm:hover{
+    border : solid 1px #5e9eff;
+    box-shadow : 0px 0px 5px rgba(5,66,120,1.0);
+}
+
+
+
+
+
+/*---------Logo-----------*/
+.logo{
+    background: url('../images/logo.png') no-repeat;
+    background-size: 155px;
+    height: 60px;
+    margin-top:10px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+/*---------User-----------*/
+.user{
+    font-family: "Amatic SC";
+    font-size: 26px;
+    font-weight: bold;
+    background: url('../images/user.png') no-repeat;
+    background-size: 45px;
+    background-position: 5px center;
+    margin: 15px;
+    margin-bottom: 35px;
+    padding-left: 65px;
+}
+
+/*---------Navigation Buttons-----------*/
 .button{
     height: 52px;
-    background-color: transparent;
+    width: 100%; 
     display: block;
-   padding-left: 60px;
-   border: 0px;
-   
-//    text-transform: uppercase;
-    font-family: "Times";
-    font-size: 24px;
-    font-weight: 600;
-	
-   transition-duration: 0.4s; 
+    border: 0px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-left: 65px;
+    
+    background-size: 45px;
+    background-color: transparent;
+    
+    font-family: "Amatic SC";
+    font-size: 26px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-align: left;    
+}
+.button:hover{
+    font-weight: bold; 
 }
 
-.button:hover {
-
-}
-
+/*--- Button specialized --*/
 .btn-upload{   
     background: url('../images/upload50.png') no-repeat;
     background-position: 5px center;
-    background-size: 50px;
+    background-size: 45px;
 }
-
-
 .btn-pictures{   
     background: url('../images/pictures50.png') no-repeat;
     background-position: 5px center;
+    background-size: 45px;
 }
 .btn-favorite{   
     background: url('../images/favorite50.png') no-repeat;
     background-position: 5px center;
+    background-size: 45px;
 }
-
 .btn-gallery{   
     background: url('../images/gallery50.png') no-repeat;
     background-position: 5px center;
+    background-size: 45px;
 }
-
 .btn-zoomIn{   
     background: url('../images/zoomin50.png') no-repeat;
     background-position: 10px center;
     background-size: 35px;
 }
-
 .btn-zoomOut{   
     background: url('../images/zoomout50.png') no-repeat;
     background-position: 10px center;
     background-size: 35px;
 }    
     
+
+

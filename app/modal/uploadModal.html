@@ -1,8 +1,39 @@
 
 
-        <form  ng-controller="UploadModalCtrl as up" name="up.upload_form">
-                Single Image with validations
-            <input 
+<form  class="upForm" ng-controller="UploadModalCtrl as up" name="up.upload_form">
+            <p>Please select the files to upload.</p> 
+            
+<!--/*### test*/ -->
+<button        class="BtnForm"
+               type="file" 
+               ngf-select 
+               ng-model="up.files" 
+               ngf-multiple="true"
+               name="file" 
+               ngf-pattern="'image/*'"
+               accept="image/*" 
+               ngf-max-size="20MB" >Select Pictures</button> 
+
+
+            <div  ng-repeat="pic in up.files" >
+            <img class="upImg" style="width:100px;" ngf-thumbnail="pic"/>
+            <i ng-show="up.upload_form.file.$error.required">*required</i><br>
+            <i ng-show="up.upload_form.file.$error.maxSize">File too large 
+            {{up.files.size / 1000000|number:1}}MB: max 20M</i>
+            
+            <p>{{up.progress}}</p>
+            </div>
+
+            <button class="BtnForm" type="submit" ng-click="up.submit()" multiple="multiple">Submit</button>
+
+
+
+<!--/*### test end*/ -->
+
+
+
+<!--/*### test end*/ 
+            <input class="upInput"
                type="file" 
                ngf-select 
                ng-model="up.files" 
@@ -11,17 +42,19 @@
                ngf-pattern="'image/*'"
                accept="image/*" 
                ngf-max-size="20MB" 
+               
                />
-            <div ng-repeat="pic in up.files">
-            <img style="width:100px;" ngf-thumbnail="pic"/>
+            <div  ng-repeat="pic in up.files" >
+            <img class="upImg" style="width:100px;" ngf-thumbnail="pic"/>
             <i ng-show="up.upload_form.file.$error.required">*required</i><br>
             <i ng-show="up.upload_form.file.$error.maxSize">File too large 
             {{up.file.size / 1000000|number:1}}MB: max 20M</i>
             
             <p>{{up.progress}}</p>
             </div>
-            <button type="submit" ng-click="up.submit()" multiple="multiple">submit</button>
-        </form>
+            <button class="upSubmit" type="submit" ng-click="up.submit()" multiple="multiple">submit</button>
+-->
+</form>
 
   <!--multiply images  
   <div class="button" ngf-select ng-model="files" ngf-multiple="true">Select</div>
