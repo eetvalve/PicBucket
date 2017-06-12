@@ -8,7 +8,7 @@
            <!-- Logo -->
             <div class="logo"> </div> 
             <!-- user -->
-           <div class="user">Username </div>
+           <div class="user"><a  ui-sref="account">{{user.username}}</a> </div>
            
             <div class="navbar-header">     
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
@@ -37,11 +37,12 @@
                     <!-- Navigation -->
                     <div class="side-menue">                            
                         <li><button class="button btn-upload" ng-click="openModal()">Upload</button></li>
-                        <li><button class="button btn-pictures" >My Pictures</button></li>
-                        <li><button class="button btn-favorite" >Favorites</button></li>
-                        <li><button class="button btn-gallery" >Gallery</button></li>
+                        <li><button class="button btn-pictures" ng-click="own()">My Pictures</button></li>
+                        <li><button class="button btn-favorite" ng-click="favorite()">Favorites</button></li>
+                        <li><button class="button btn-gallery" ng-click="home()" >Gallery</button></li>
+                        <!--
                         <li><button class="button btn-zoomIn" >Zoom In</button></li>
-                        <li><button class="button btn-zoomOut" >Zoom Out</button></li>
+                        <li><button class="button btn-zoomOut" >Zoom Out</button></li> -->
                     </div>
                 </div><!--/.nav-collapse -->
             </div>

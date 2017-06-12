@@ -17,10 +17,11 @@ var gfs = grid(conn.db);
 router.post('/api/upload', function (req, res) {
 
     var part = req.files.file;
+    var owner = req.body.owner;
 
     var writeStream = gfs.createWriteStream({
         filename: part.name,
-        metadata: {"objectId": part.name, "tags": [], "favorite": "edu"},
+        metadata: {"owner": owner, "tags": []},
         mode: 'w',
         content_type: part.mimetype
     });
@@ -44,7 +45,7 @@ router.get('/picturelist/', function (req, res) {
         if (files.length > 0) {
             var array = [];
             for (var i = 0; i < files.length; i++) {
-                array.push(files[i]._id);
+                array.push({data: files[i]._id, meta: files[i].metadata});
             }
             res.send(array);
         } else {
@@ -123,37 +124,7 @@ router.put('/pictures/:id', function (req, res) {
         }
     });
 });
-//check if favorite
-router.put('/favorite/pictures/:id', function (req, res) {
-    var picture_id = mongoose.Types.ObjectId(req.params.id.toString());
 
-    gfs.files.findOne({_id: picture_id}, function (err, files) {
-        if (err) {
-            res.json(err);
-        }
-        if (files.length > 0) {
-            var apu = [];
-
-            apu.push(files.metadata.favorite);
-
-            var combine = apu.concat(req.body);
-
-
-            gfs.files.update({_id: picture_id}, {$set: {"metadata.favorite": combine}}, function (err, file) {
-
-                if (err) {
-                    res.send(err);
-                } else {
-                    res.json(file);
-
-                }
-            });
-
-        } else {
-            res.json('File Not Found');
-        }
-    });
-});
 //download image to hardrive
 router.get('/download/pictures/:id', function (req, res) {
 

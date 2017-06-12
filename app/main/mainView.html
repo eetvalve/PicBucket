@@ -5,20 +5,31 @@
     <h3>Pictures</h3>
     <!---->
     <div ng-if="picdataLength" >
-        <div ng-repeat="x in pictureData | filterByTable:searchResultArray:pictureTags:downloadItems" style="float:left">
             
+        
+       
+            
+        
+        <div ng-repeat="x in newImageList | filterByTable:searchResultArray:pictureTags:downloadItems" style="float:left">
+        
             <label><input type="checkbox" value="" ng-checked="downloadItems.indexOf(x) > -1"
-                          ng-click="toggleSelection(x)">Select image</label>
+                          ng-click="toggleSelection(x.data)">Select image</label>
             
-            <div ng-show='favoriteTrue'>
-            <i class="fa fa-star" aria-hidden="true"></i>
-            </div>
-            <div ng-show="favoriteFalse">
-            <i class="fa fa-star-o" aria-hidden="true"></i>
-            </div>
             
-            <img ng-src="/pictures/{{x}}" width="300" height="300">
+        <div ng-show="x.value === 'yesStar'"> <img ng-src="/pictures/{{x.data}}" width="300" height="300">
+        <i class="fa fa-star" aria-hidden="true"></i>
         </div>
+        
+           
+        <div ng-show="x.value === 'noStar'"> <img ng-src="/pictures/{{x.data}}" width="300" height="300">
+        <i class="fa fa-star-o" aria-hidden="true"></i>
+        </div>
+           
+        </div>
+        
+        
+        
+     
     </div>
     
     
@@ -29,3 +40,4 @@
         <button class="btn btn-warning btn-sm" ng-click="openModal()">DELETE</button>
     </div>
 </div>
+

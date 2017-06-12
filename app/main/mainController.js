@@ -29,16 +29,122 @@ angular.module('mainctrl', [])
                 return arr;
             }
         })
-        .controller('MainCtrl', ['$scope', '$http', 'searchService', 'imageService', '$uibModal', 'FileSaver', 'Blob', function ($scope, $http, searchService,imageService, $uibModal, FileSaver, Blob) {
+        .controller('MainCtrl', ['$scope', '$http', '$timeout', 'searchService', 'imageService', '$uibModal', 'FileSaver', 'Blob', 'UserService', function ($scope, $http, $timeout, searchService,imageService, $uibModal, FileSaver, Blob, UserService) {
 
-
+                $scope.newImageList = [];
                 $scope.favoriteTrue = false;
                 $scope.favoriteFalse = true;
-
+                
+                $scope.starShow = false;
+                $scope.starHide = true;
+                $scope.navOwnNot = true;
+                $scope.user;
                 $scope.usernamePlaceholder = "wat";
                 $scope.searchResultArray = [];
                 $scope.pictureTags = {};
                 //delete pictures
+                
+                
+                $scope.getUserName = function () {
+                    UserService.GetCurrent().then(function (user) {
+                        $scope.user = user;
+                        console.log($scope.user);
+
+
+                        imageService.setUsernameBind($scope.user.username);
+
+                    });
+                };
+
+                $scope.getUserName();
+
+                $timeout(function () {
+                    //$scope.GetOwnImages();
+                    $scope.GetAll();
+
+                }, 2000);
+
+
+                $scope.GetOwnImages = function () {
+                    $scope.newImageList = [];
+
+                    for (var y = 0; y < $scope.pictureData.length; y++) {
+                        if ($scope.pictureData[y].meta.owner === $scope.user.username) {
+                            $scope.newImageList.push({data: $scope.pictureData[y].data, value: "noStar"});
+                            console.log($scope.newImageList);
+                        }
+                    }
+                };
+                
+                $scope.GetOnlyStars = function () {
+                    $scope.newImageList = [];
+                    if (typeof $scope.user.favorite !== "undefined") {
+                    for (var y = 0; y < $scope.pictureData.length; y++) {
+                        for (var i = 0; i < $scope.user.favorite.length; i++) {
+                        if ($scope.user.favorite[i] === $scope.pictureData[y].data) {
+                            $scope.newImageList.push({data: $scope.pictureData[y].data, value: "yesStar"});
+                            console.log($scope.newImageList);
+                        }
+                    }
+                    }
+                }else{
+                    console.log("no favorites");
+                }
+                };
+
+
+                $scope.GetAll = function () {
+
+                    $scope.newImageList = [];
+                    $scope.starList = [];
+
+                    for (var y = 0; y < $scope.pictureData.length; ) {
+                        if (typeof $scope.user.favorite !== "undefined") {
+
+                            for (var i = 0; i < $scope.user.favorite.length; i++) {
+
+                                console.log($scope.pictureData[y].data);
+
+
+                                var shortenDataName = $scope.pictureData[y].data;
+
+                                // console.log($scope.newImageList);
+
+                                if ($scope.user.favorite[i] === shortenDataName) {
+                                    console.log("matchmadeinheaven!");
+                                    $scope.newImageList.push({data: $scope.pictureData[y].data, value: "yesStar"});
+                                    $scope.starList.push({data: $scope.pictureData[y].data, value: "yesStar"});
+                                    y++;
+                                    i = 0;
+
+
+                                } else if ($scope.user.favorite[i] !== shortenDataName &&
+                                        $scope.user.favorite[$scope.user.favorite.length - 1] === $scope.user.favorite[i]) {
+
+                                    console.log("NOPE");
+                                    $scope.newImageList.push({data: $scope.pictureData[y].data, value: "noStar"});
+                                    console.log($scope.newImageList);
+                                    y++;
+                                    i = 0;
+
+                                } else if ($scope.pictureData[$scope.pictureData.length - 1] === $scope.pictureData[y] &&
+                                        $scope.user.favorite[$scope.user.favorite.length - 1] === $scope.user.favorite[i]) {
+
+                                    console.log("jep");
+                                    break;
+
+                                }
+
+
+                            }
+                        } else {
+                            $scope.newImageList.push({data: $scope.pictureData[y].data, value: "noStar"});
+                            console.log($scope.newImageList);
+                            y++;
+                        }
+                    }
+                };
+                
                 $scope.openModal = function () {
 
                     $scope.getArray();
@@ -75,7 +181,7 @@ angular.module('mainctrl', [])
                             });
                         }
                     }
-                }
+                };
                 $scope.picData = function () {
 
                     $scope.pictureData = {};
@@ -83,37 +189,49 @@ angular.module('mainctrl', [])
                     imageService.getPics().then(function (data) {
                         $scope.pictureData = data.data;
                         $scope.updateTagTable();
-                        //console.log("kuvien data");
-                        //console.log($scope.pictureData);
+                        console.log("kuvien data");
+                        console.log($scope.pictureData);
                         if ($scope.pictureData === null) {
                             $scope.picdataLength = false;
                         } else {
                             $scope.picdataLength = true;
                         }
-                        
-
-
-                        for (var i = 0; i < $scope.pictureData.length; i++) {
-                            for (var y = 0; y < $scope.pictureData[i].metadata.favorite.length; y++) {
-                                if ($scope.pictureData[i][y].metadata.favorite === $scope.usernamePlaceholder) {
-                                    $scope.favoriteTrue = true;
-                                    $scope.favoriteFalse = false;
-
-                                    //console.log("$scope.pictureData[i][y].metadata.favorite");
-                                    //console.log($scope.pictureData[i][y].metadata.favorite);
-                                }
-                            }
-                        }
                     });
-                };
+                };  
+                
+                $scope.$watch(function () {
+                    return $scope.navFav = imageService.getFav();
+                }, function (data) {
+                    console.log("tapahtuu");
+                   
+                    $scope.GetOnlyStars();
+                });
+
+                $scope.$watch(function () {
+                    return $scope.navOwn = imageService.getOwn();
+                }, function (data) {
+                   
+                    $scope.GetOwnImages();
+                    
+                });
+                
+                $scope.$watch(function () {
+                    return $scope.change = imageService.getFav2();
+                }, function (data) {
+                    console.log("gg");
+                   
+                    $scope.GetAll();
+                });
+                
 
                 $scope.$watch(function () {
                     return imageService.watchUpdate();
                 }, function (data) {
 
                     $scope.pictureData = data;
-                    $scope.updateTagTable()
-                    //console.log($scope.pictureData);
+                    $scope.updateTagTable();
+                    $scope.GetAll();
+                    console.log($scope.pictureData);
                 });
 
                 $scope.picData();
@@ -171,9 +289,7 @@ angular.module('mainctrl', [])
 
 
                 $scope.favorite = function () {
-                    for (var i = 0; i < $scope.downloadItems.length; i++) {
-                        imageService.favoritePics($scope.downloadItems[i]);
-                    }
+                     UserService.addFavorites($scope.user, $scope.downloadItems);
                 };
 
 

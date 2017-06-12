@@ -1,6 +1,7 @@
 require('rootpath')();
 var express = require('express');
 var path = require('path');
+var config = require('./config.json');
 //var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -14,18 +15,20 @@ var mongoose = require('mongoose');
 var formidable = require("formidable");
 var async = require("async");
 var busboyBodyParser = require('busboy-body-parser');
+
+
 var uutiset = require('./routes/uutisetM');
 var picUpload = require('./routes/picUpload');
 var picSearch = require('./routes/picSearch');
-var config = require('./config.json');
+
 
 var app = express();
 
 
 // view engine setup TAMA VAIHTUU SERVERIN VIEWSIIN LOGINIIN
-app.set('views', path.join(__dirname, '../', 'app'));
-app.set('view engine', 'ejs');
 
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
 
 //takes image-chunks from db and parse em.
 app.use(busboyBodyParser());
@@ -34,36 +37,17 @@ app.use(busboyBodyParser());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(session({ secret: config.secret, resave: false, saveUninitialized: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '../', 'app')));
-
-
-
-var storage = multer.diskStorage({//multers disk storage settings
-    destination: function (req, file, cb) {
-
-        var pathh = './tmpImages/';
-        fs.mkdirsSync(pathh);
-        cb(null, pathh);
-    },
-    filename: function (req, file, cb) {
-        var datetimestamp = Date.now();
-        cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1])
-    }
-});
-var upload = multer({//multer settings
-    storage: storage
-}).single('file');
-/** API path that will upload the files */
 
 
 
 
-/*
- app.use(session({ secret: config.secret, resave: false, saveUninitialized: true }));
- 
+
+app.use( express.static( "public" ) );
+
  // use JWT auth to secure the api
- app.use('./controllers/api', expressJwt({ secret: config.secret }).unless({ path: ['./controllers/api/users/authenticate', './controllers/api/users/register'] }));
+ app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register'] }));
  
  // routes
  app.use('/login', require('./controllers/login.controller'));
@@ -75,7 +59,9 @@ var upload = multer({//multer settings
  app.get('/', function (req, res) {
  return res.redirect('/app');
  });
- */
+ 
+ 
+app.use(express.static(path.join(__dirname, '../', 'app')));
 
 app.use('/', uutiset);
 app.use('/', picUpload);

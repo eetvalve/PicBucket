@@ -2,6 +2,10 @@ angular.module('imageService', [])
         .factory('imageService', ['$rootScope', '$http', 'FileSaver', 'Blob', function ($rootScope, $http, FileSaver, Blob) {
 
                 var dataCarrier;
+                var favs = true;
+                var favs2 = true;
+                var userName;
+                var ownTrue = false;
 
                 var getPics = function () {
                     return $http.get('/picturelist/')
@@ -108,6 +112,34 @@ angular.module('imageService', [])
                 var setUpdate = function () {
                     getPics();
                 };
+                
+                setFav = function(value){
+                    favs = value;
+                };
+                getFav = function(){
+                   return favs; 
+                };
+                
+                setFav2 = function(value){
+                    favs2 = value;
+                };
+                getFav2 = function(){
+                   return favs2; 
+                };
+                
+                setUsernameBind = function(name){
+                     userName = name;
+                };
+                getUsernameBind = function(){
+                    return userName;
+                };
+                
+                setOwn = function(value){
+                    ownTrue = value;
+                };
+                getOwn = function(){
+                    return ownTrue;
+                };
 
 
                 return {
@@ -123,7 +155,15 @@ angular.module('imageService', [])
                     getChecBox: getChecBox,
                     watchUpdate: watchUpdate,
                     setUpdate: setUpdate,
-                    getTags: getTags
+                    getTags: getTags,
+                    setFav: setFav,
+                    getFav: getFav,
+                    setFav2: setFav2,
+                    getFav2: getFav2,
+                    setUsernameBind: setUsernameBind,
+                    getUsernameBind: getUsernameBind,
+                    setOwn: setOwn,
+                    getOwn: getOwn
                 };
 
             }]);

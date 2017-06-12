@@ -27,23 +27,28 @@ require('./modal/deleteModalController');
 require('./modal/tagModalController');
 require('./modal/uploadModalDirective');
 
+require('./app-services/flash.service');
+require('./alert/alertService');
+require('./account/index.controller');
+require('./app-services/user.service');
+
 //services
 require('./services/imageService');
 require('./services/searchService');
 
 var app = angular.module('app', [ 'ui.bootstrap', 'ui.router', 'textAngular', 'ngFileUpload', 'ngFileSaver', 'mainctrl', 'searchctrl', 'navigationctrl', 'uploadmodalctrl',
-    'uploadmodaldirective', 'imageService', 'deletemodalctrl', 'tagmodalctrl', 'searchService']);
+    'uploadmodaldirective', 'imageService', 'deletemodalctrl', 'tagmodalctrl', 'searchService', 'Flash', 'alertService', 'Account', 'User']);
 
 
 app.config(function ($stateProvider, $urlRouterProvider) {
     
-    $urlRouterProvider.otherwise('/home');
+    $urlRouterProvider.otherwise('/');
 
     $stateProvider
 
             // HOME STATES AND NESTED VIEWS ========================================
             .state('home', {
-                url: '/home',
+                url: '/',
                 views: {
                     '': {templateUrl: 'home.html'},
                     // the child views will be defined here (absolutely named)
@@ -53,5 +58,32 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                     
                 },
                 data: {activeTab: 'home'}
+            })
+            .state('account', {
+                url: '/account',
+                templateUrl: 'account/index.html',
+                controller: 'Account.IndexController',
+                controllerAs: 'vm',
+                data: {activeTab: 'account'}
             });
 });
+
+app.run(function($http, $rootScope, $window) {
+    // add JWT token as default auth header
+    $http.defaults.headers.common['Authorization'] = 'Bearer ' + $window.jwtToken;
+
+    // update active tab on state change
+    $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+        $rootScope.activeTab = toState.data.activeTab;
+    });
+    
+     
+});
+  $(function () {
+        // get JWT token from server
+        $.get('/app/token', function (token) {
+            window.jwtToken = token;
+
+            angular.bootstrap(document, ['app']);
+        });
+    });

@@ -1,9 +1,9 @@
 {
     "connectionString": "mongodb://user:qwerty@ds061374.mlab.com:61374/heroku_twqg7glc",
-    "apiUrl": "https://picbucket.herokuapp.com/api",
-    "secret": "jee",
+    "apiUrl": "http://localhost:8080/api",
+    "secret": "gg",
     "lokaaliDB": "mongodb://localhost:27017/mean-stack-registration-login-example",
-    "localUrl": "http://localhost:8800/api"
+    "productionURl": "https://picbucket.herokuapp.com/api"
 }
 
 
