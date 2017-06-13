@@ -1,37 +1,44 @@
 .col-sm-10{
-   border-style: ridge;
+    border-style: ridge;
 }
 /* make sidebar nav vertical */ 
 @media (min-width: 768px) {
-  .sidebar-nav .navbar .navbar-collapse {
-    padding: 0;
-    min-height: 5000px;
-  }
-  .sidebar-nav .navbar ul {
-    float: none;
-    display: block;
-  }
-  .sidebar-nav .navbar li {
-    float: none;
-    display: block;
-  }
-  .sidebar-nav .navbar li a {
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
+    .sidebar-nav .navbar .navbar-collapse {
+        padding: 0;
+        min-height: 5000px;
+    }
+    .sidebar-nav .navbar ul {
+        float: none;
+        display: block;
+    }
+    .sidebar-nav .navbar li {
+        float: none;
+        display: block;
+    }
+    .sidebar-nav .navbar li a {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
 }
 .navbar-fixed-left {
-  width: 140px;
-  position: fixed;
-  border-radius: 0;
-  height: 100%;
+    width: 140px;
+    position: fixed;
+    border-radius: 0;
+    height: 100%;
 }
 .selectedDownloadItem{
     background-color: lightgrey;
     position: fixed;
     bottom: 0;
-    width: 100%;
+
+    width: 50%;
+    border-radius: 3px;
+    margin: 0 auto;
 }
+.outerDiv{
+
+}
+
 
 /*----------- Normal Text --------------*/
 p{
@@ -64,7 +71,7 @@ p{
     margin-right: auto;
 
     display: block;
-    
+
     border : solid 1px #f0f0f0;
     border-radius : 3px;
     moz-border-radius : 3px;
@@ -89,6 +96,11 @@ p{
     box-shadow : 0px 0px 5px rgba(5,66,120,1.0);
 }
 
+.BtnForm2{
+    font-family: "Amatic SC";
+    font-size: 18px;
+    font-weight: bold;
+}
 
 
 
@@ -125,10 +137,10 @@ p{
     margin-top: 10px;
     margin-bottom: 5px;
     padding-left: 65px;
-    
+
     background-size: 45px;
     background-color: transparent;
-    
+
     font-family: "Amatic SC";
     font-size: 26px;
     font-style: normal;
@@ -174,8 +186,94 @@ p{
 .side-menue{
     margin-left: auto;
     margin-right: auto;
-   
+
 }
+.container_row {
+
+    height: 50px;
+    margin: 0;
+    position: relative;
+}
+
+.layer1 {
+    position: absolute;
+
+
+
+}
+input.uniq[type=radio], input.uniq[type=checkbox]
+{
+    /* Double-sized Checkboxes */
+    -ms-transform: scale(2); /* IE */
+    -moz-transform: scale(2); /* FF */
+    -webkit-transform: scale(2); /* Safari and Chrome */
+    -o-transform: scale(2); /* Opera */
+    padding: 10px;
+    cursor: pointer;
+    border: 2px solid #777;
+    box-sizing: border-box;
+    margin-top: 12px;
+    margin-left: 12px;
+    color: #777;
+    border-radius: 0px;
+    display: block;
+}
+#uniqCheckbox{
+    border-radius: 0px;
+    color: white;
+}
+#star {
+    position: absolute;
+    margin-top: -25px;
+    margin-left: 5px;
+    font-size: 20px;
+}
+.h1font{
+    font-family: "Amatic SC";
+    font-size: 50px;
+    margin-top: 8px;
+    margin-bottom: 17px;
+}
+.customButtons{
+    height: 52px;
+
+    border: 0px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    margin-left: 20px;
+    font-family: "Amatic SC";
+    font-size: 26px;
+    font-weight: 600;
+    color: white;
+    border-radius:  3px;
+}
+
+
+#delBut:hover{
+    font-weight: 900;
+    color: red;
+}
+#dlBut:hover{
+    font-weight: 900;
+    background-color: #00CED1;
+}
+
+#dlBut{
+    background-color: #40E0D0;
+}
+.customButtons:hover{
+    font-weight: 900;
+    font-size: 28px;
+}
+.butHolder{
+    text-align: center;
+}
+.h4Font{
+    font-family: "Amatic SC";
+}
+.navbar{
+    margin-bottom: 0 !important; 
+}
+.navigation{
     
-
-
+}

@@ -3,11 +3,11 @@
         <div style="float:left">
             
             <form name="myForm">
-                <h2>Add tags (seperate with tags with ','. Max 10 tags)</h2>
+                <h4 class="h4Font">Add tags (seperate with tags with ',')</h4>
                 <input type="text" class="form-control input-md" name='namesInput' placeholder="add tags here.." ng-model="tagit" ng-value="picTags" ng-list >
 
-                <button type="submit" ng-click="tag(tagit)">Add tags</button>
-                <button type="submit" ng-click="cancel()">Cancel</button>
+                <button class="BtnForm2" type="submit" ng-click="tag(tagit)">Add tags</button>
+                <button class="BtnForm2" type="submit" ng-click="cancel()">Cancel</button>
 
                 <div ng-if="delTrue">
                     <button type="submit" ng-click="cancel()">Done</button>

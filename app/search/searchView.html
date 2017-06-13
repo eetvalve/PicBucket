@@ -1,6 +1,60 @@
+<style>
+	#changeView {
+	    margin-top: 0px;
+	    margin-left: 0px;
+	    font-size: 30px;
+		height: 30px;
+    	display: inline;
+    	vertical-align: middle;
+	}
+	#_searchbar {
+    	display: inline;
+		height: 30px;
+    	width: 400px;
+    	text-align: center;
+    	margin: auto;
+    	vertical-align: middle;
+	}
+	#dropdown_menu {
+	    margin-top: 0px;
+	    margin-left: 0px;
+		height: 30px;
+    	display: inline;
+    	vertical-align: middle;
+
+    border: 0px;
+    font-family: "Amatic SC";
+    font-weight: 600;
+    color: white;
+	}
+	#common_tags_button {
+    	display: inline;
+    	vertical-align: middle;
+	    margin-left: 1px;
+	    font-family: "Amatic SC";
+	    font-size: 26px;
+	    font-weight: 600;
+	    color: white;
+	    border-radius:  3px;
+	}
+	#menu1 {
+	    margin-top: 0px;
+	    margin-left: 0px;
+		height: 40px;
+    	display: inline;
+    	vertical-align: middle;
+	}
+	#centered {
+    	width: 590px;
+    	margin: auto;
+	}
+	#searchRow {
+		/*background-color: lightgray;*/
+	}
+</style>
 
 <div ng-controller="SearchCtrl">
-	<h1>
+	<div id="centered">
 	<input 	type="text" 
 			ng-model="searchBox"
 			ng-change="changeHandler()"
@@ -8,10 +62,10 @@
 			id="_searchbar"
 			size="screenWidth">
 	</input>
-	<a><i class="fa fa-square" aria-hidden="true" ng-click="changeview(0)"></i></a>
-	<a><i class="fa fa-th-large" aria-hidden="true" ng-click="changeview(1)"></i></a>
-	<a><i class="fa fa-th" aria-hidden="true" ng-click="changeview(2)"></i></a>
-	<div class="dropdown">
+	<a><i class="fa fa-square" aria-hidden="true" ng-click="changeview(0)" id="changeView"></i></a>
+	<a><i class="fa fa-th-large" aria-hidden="true" ng-click="changeview(1)" id="changeView"></i></a>
+	<a><i class="fa fa-th" aria-hidden="true" ng-click="changeview(2)" id="changeView"></i></a>
+	<div class="dropdown" id="dropdown_menu">
 	<button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown" >Sort by
 	<span class="caret" ></span></button>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="menu1" >
@@ -19,14 +73,12 @@
 		  <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="sortby('date')" href="">Date</a></li>
 		  <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="sortby('meta.owner')" href="">Uploader</a></li>
 		</ul>
-	</div>
-	</h1>
-	Common tags: <br>
-	<div ng-repeat="x in commonTags" style="float:left">
+	</div></div>
+	Common tags: 
+	<div ng-repeat="x in commonTags" style="display: inline; line-height:2.5">
 		<md-button class="btn btn-primary btn-sm" 
-		ng-click="setSearch(x)">
+		ng-click="setSearch(x)" id="common_tags_button">
 			{{x}}
 		</md-button>
 	</div>
-    <br><br>
 </div>

@@ -17,7 +17,7 @@ angular.module('mainctrl', [])
                             }
                         }
                         if(searchResultArray[n].trim()=="") 
-                            pass++;
+                            pass++; 
                     }
                     if (pass>=searchResultArray.length) 
                         arr.push(input[i]);
@@ -35,6 +35,8 @@ angular.module('mainctrl', [])
                 $scope.newImageList = [];
                 $scope.favoriteTrue = false;
                 $scope.favoriteFalse = true;
+                
+                $scope.switchTitle="Gallery";
                 
                 $scope.starShow = false;
                 $scope.starHide = true;
@@ -186,16 +188,27 @@ angular.module('mainctrl', [])
                     case 1:
                         $scope.w = 400;
                         $scope.h = 400;
+                        $scope.fullscreen = false;
                         break;
                     case 2:
                         $scope.w = 200;
                         $scope.h = 200;
+                        $scope.fullscreen = false;
                         break;
                     default:
                         $scope.w = 600;
                         $scope.h = 600;
+                        $scope.fullscreen = true;
                     }
                 }
+                $scope.pictureInView = 0;
+                $scope.pervious_image = function() {
+                    if( $scope.pictureInView>0 )
+                        $scope.pictureInView = $scope.pictureInView - 1;
+                };
+                $scope.next_image = function() {
+                    $scope.pictureInView = $scope.pictureInView + 1;
+                };
                 $scope.updateView(0);
                 $scope.picData = function () {
 
@@ -219,7 +232,8 @@ angular.module('mainctrl', [])
                 $scope.$watch(function () {
                     return $scope.navFav = imageService.getFav();
                 }, function (data) {
-                   
+                    console.log("tapahtuu");
+                   $scope.switchTitle="Favorites";
                     $scope.GetOnlyStars();
                 });
                 $scope.$watch(function () {
@@ -237,7 +251,7 @@ angular.module('mainctrl', [])
                 $scope.$watch(function () {
                     return $scope.navOwn = imageService.getOwn();
                 }, function (data) {
-                   
+                    $scope.switchTitle="My pictures";
                     $scope.GetOwnImages();
                     
                 });
@@ -245,7 +259,8 @@ angular.module('mainctrl', [])
                 $scope.$watch(function () {
                     return $scope.change = imageService.getFav2();
                 }, function (data) {
-                   
+                    console.log("gg");
+                    $scope.switchTitle="Gallery";
                     $scope.GetAll();
                 });
                 
