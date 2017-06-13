@@ -35,6 +35,8 @@ angular.module('mainctrl', [])
                 $scope.favoriteTrue = false;
                 $scope.favoriteFalse = true;
                 
+                $scope.switchTitle="Gallery";
+                
                 $scope.starShow = false;
                 $scope.starHide = true;
                 $scope.navOwnNot = true;
@@ -203,14 +205,14 @@ angular.module('mainctrl', [])
                     return $scope.navFav = imageService.getFav();
                 }, function (data) {
                     console.log("tapahtuu");
-                   
+                   $scope.switchTitle="Favorites";
                     $scope.GetOnlyStars();
                 });
 
                 $scope.$watch(function () {
                     return $scope.navOwn = imageService.getOwn();
                 }, function (data) {
-                   
+                    $scope.switchTitle="My pictures";
                     $scope.GetOwnImages();
                     
                 });
@@ -219,7 +221,7 @@ angular.module('mainctrl', [])
                     return $scope.change = imageService.getFav2();
                 }, function (data) {
                     console.log("gg");
-                   
+                    $scope.switchTitle="Gallery";
                     $scope.GetAll();
                 });
                 
