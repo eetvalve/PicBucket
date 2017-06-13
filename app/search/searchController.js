@@ -6,10 +6,17 @@ angular.module('searchctrl', [])
 			searchService.setSearchResult($scope.searchBox);
 		};
 		$scope.commonTags = [];
-
+		$scope.screenWidth = window.innerWidth;
+		//$scope._searchbar.size = screen.width;
 		// Suggested tags are inserted into the searchbar
 		$scope.setSearch = function (input) {
 			searchService.addSearchTag(input,$scope);
+		};
+		$scope.changeview = function(input){
+			imageService.changeView(input);
+		};
+		$scope.sortby = function(input) {
+			imageService.sortBy(input);
 		};
 		$scope.CalculateNewButtons = function() {
 			$scope.pictures = {};
@@ -18,7 +25,7 @@ angular.module('searchctrl', [])
 			imageService.getPics().then(function (data) {
 				$scope.pictures = data.data;
 				for (var i = 0; i < $scope.pictures.length; i++) {
-					imageService.getTags($scope.pictures[i]).then(function (_tags) {
+					imageService.getTags($scope.pictures[i].data).then(function (_tags) {
 						var imageTags = _tags.data;
 						for (var i=0; i<imageTags.length; i++) {
 							$scope.tagList.push(imageTags[i]);
@@ -28,7 +35,6 @@ angular.module('searchctrl', [])
 							updateButtons(); // Lets build the buttons after we get all the tags!
 						}
 					});
-
 				}
 			});
 		}

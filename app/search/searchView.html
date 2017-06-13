@@ -1,11 +1,26 @@
 
 <div ng-controller="SearchCtrl">
-	<br>
-	<input type="text" 
-	ng-model="searchBox"
-	ng-change="changeHandler()"
-	placeholder="Search by using tags">
-	</input><br><br>
+	<h1>
+	<input 	type="text" 
+			ng-model="searchBox"
+			ng-change="changeHandler()"
+			placeholder="Search by using tags"
+			id="_searchbar"
+			size="screenWidth">
+	</input>
+	<a><i class="fa fa-square" aria-hidden="true" ng-click="changeview(0)"></i></a>
+	<a><i class="fa fa-th-large" aria-hidden="true" ng-click="changeview(1)"></i></a>
+	<a><i class="fa fa-th" aria-hidden="true" ng-click="changeview(2)"></i></a>
+	<div class="dropdown">
+	<button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown" >Sort by
+	<span class="caret" ></span></button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="menu1" >
+		  <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="sortby('')" href="">None</a></li>
+		  <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="sortby('date')" href="">Date</a></li>
+		  <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="sortby('meta.owner')" href="">Uploader</a></li>
+		</ul>
+	</div>
+	</h1>
 	Common tags: <br>
 	<div ng-repeat="x in commonTags" style="float:left">
 		<md-button class="btn btn-primary btn-sm" 

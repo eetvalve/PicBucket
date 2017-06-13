@@ -2,7 +2,7 @@ angular.module('searchService', [])
         .factory('searchService', ['$rootScope', '$http', function ($rootScope, $http) {
                 $rootScope.searchResult = "";
                 var getSearchResult = function() {
-                    return $rootScope.searchResult; //{{searchBox}}
+                    return $rootScope.searchResult;
                 };
 
                 var setSearchResult = function(input) {

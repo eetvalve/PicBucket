@@ -9,8 +9,8 @@ angular.module('mainctrl', [])
                 for (var i = 0; i < input.length; i++) {
                     var pass = 0;
                     for (var n = 0; n < searchResultArray.length; n++) {
-                        for (var k = 0; k < pictureTags[input[i]].length; k++) {
-                            var str = pictureTags[input[i]][k]
+                        for (var k = 0; k < pictureTags[input[i].data].length; k++) {
+                            var str = pictureTags[input[i].data][k]
                             var patt = RegExp(searchResultArray[n], 'i');
                             if (patt.test(str)&&searchResultArray[n].trim()!="") {
                                 pass++;
@@ -23,8 +23,9 @@ angular.module('mainctrl', [])
                         arr.push(input[i]);
                 }
                 for (var i = 0; i < selectedItems.length; i++) {
-                    if(arr.indexOf(selectedItems[i])==-1)
-                        arr.push(selectedItems[i]);
+                    var _selected = input.find(function(_arr) {return _arr.data === selectedItems[i]});
+                    if(arr.indexOf(_selected)==-1)
+                        arr.push(_selected);
                 }
                 return arr;
             }
@@ -103,7 +104,7 @@ angular.module('mainctrl', [])
 
                             for (var i = 0; i < $scope.user.favorite.length; i++) {
 
-                                console.log($scope.pictureData[y].data);
+                                //console.log($scope.pictureData[y].data);
 
 
                                 var shortenDataName = $scope.pictureData[y].data;
@@ -164,17 +165,15 @@ angular.module('mainctrl', [])
                         animation: true,
                         templateUrl: '../modal/tagModal.html',
                         controller: 'TagModalCtrl'
-
                     });
                 };
                 $scope.updateTagTable = function() {
                     if ($scope.pictureData) {
                         for (var i = 0; i < $scope.pictureData.length; i++) {
-                                $scope.pictureTags[$scope.pictureData[i]] = [];
+                                $scope.pictureTags[$scope.pictureData[i].data] = [];
                         }
-                        var i = 0;
                         for (var i = 0; i < $scope.pictureData.length; i++) {
-                            imageService.getTags($scope.pictureData[i]).then(function (_tags) {
+                            imageService.getTags($scope.pictureData[i].data).then(function (_tags) {
                                 var str = _tags.config.url;
                                 str = str.slice(6, str.length);
                                 $scope.pictureTags[str] = _tags.data;
@@ -182,6 +181,22 @@ angular.module('mainctrl', [])
                         }
                     }
                 };
+                $scope.updateView = function(view) {
+                    switch(view) {
+                    case 1:
+                        $scope.w = 400;
+                        $scope.h = 400;
+                        break;
+                    case 2:
+                        $scope.w = 200;
+                        $scope.h = 200;
+                        break;
+                    default:
+                        $scope.w = 600;
+                        $scope.h = 600;
+                    }
+                }
+                $scope.updateView(0);
                 $scope.picData = function () {
 
                     $scope.pictureData = {};
@@ -196,15 +211,27 @@ angular.module('mainctrl', [])
                         } else {
                             $scope.picdataLength = true;
                         }
+                        console.log("!!PICTURE DATA!!");
+                        console.log($scope.pictureData);
+                        console.log("!!PICTURE DATA!!");
                     });
                 };  
-                
                 $scope.$watch(function () {
                     return $scope.navFav = imageService.getFav();
                 }, function (data) {
-                    console.log("tapahtuu");
                    
                     $scope.GetOnlyStars();
+                });
+                $scope.$watch(function () {
+                    return $scope.view = imageService.getView();
+                }, function (data) {
+                    $scope.updateView(data);
+                });
+                $scope.sortBy = "";
+                $scope.$watch(function () {
+                    return $scope.view = imageService.getSort();
+                }, function (data) {
+                    $scope.sortBy = data;
                 });
 
                 $scope.$watch(function () {
@@ -218,7 +245,6 @@ angular.module('mainctrl', [])
                 $scope.$watch(function () {
                     return $scope.change = imageService.getFav2();
                 }, function (data) {
-                    console.log("gg");
                    
                     $scope.GetAll();
                 });

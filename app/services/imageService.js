@@ -49,7 +49,20 @@ angular.module('imageService', [])
                                 return data;
                             });
                 };
-
+                var _view = 1;
+                var _sort = '';
+                var changeView = function (view) {
+                    _view = view;
+                };
+                var sortBy = function(sort) {
+                    _sort = sort;
+                };
+                var getSort = function(sort) {
+                    return _sort;
+                };
+                var getView = function() {
+                    return _view;
+                };
                 var items = [];
                 var setArray = function () {
                     console.log('set');
@@ -113,31 +126,31 @@ angular.module('imageService', [])
                     getPics();
                 };
                 
-                setFav = function(value){
+                var setFav = function(value){
                     favs = value;
                 };
-                getFav = function(){
+                var getFav = function(){
                    return favs; 
                 };
                 
-                setFav2 = function(value){
+                var setFav2 = function(value){
                     favs2 = value;
                 };
-                getFav2 = function(){
+                var getFav2 = function(){
                    return favs2; 
                 };
                 
-                setUsernameBind = function(name){
+                var setUsernameBind = function(name){
                      userName = name;
                 };
-                getUsernameBind = function(){
+                var getUsernameBind = function(){
                     return userName;
                 };
                 
-                setOwn = function(value){
+                var setOwn = function(value){
                     ownTrue = value;
                 };
-                getOwn = function(){
+                var getOwn = function(){
                     return ownTrue;
                 };
 
@@ -163,7 +176,11 @@ angular.module('imageService', [])
                     setUsernameBind: setUsernameBind,
                     getUsernameBind: getUsernameBind,
                     setOwn: setOwn,
-                    getOwn: getOwn
+                    getOwn: getOwn,
+                    changeView: changeView,
+                    getView: getView,
+                    getSort: getSort,
+                    sortBy: sortBy
                 };
 
             }]);

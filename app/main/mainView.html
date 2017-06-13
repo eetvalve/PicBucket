@@ -1,27 +1,30 @@
-<h1>Images</h1>
+<!--<h1>Images</h1>-->
 
 <div ng-controller="MainCtrl">
 
-    <h3>Pictures</h3>
+    <!--<h3>Pictures</h3>-->
     <!---->
     <div ng-if="picdataLength" >
-            
-        
-       
-            
-        
-        <div ng-repeat="x in newImageList | filterByTable:searchResultArray:pictureTags:downloadItems" style="float:left">
+    <!--en ossaa-->
+        <li ng-repeat="(key, value) in newImageList | groupBy: 'meta.owner'">
+          Group name: {{ key }}
+          <ul ng-repeat="player in value">
+            player: {{ player._id }} 
+          </ul>
+        </li>
+
+        <div ng-repeat="x in newImageList | filterByTable:searchResultArray:pictureTags:downloadItems | orderBy:'sortBy'" style="float:left">
         
             <label><input type="checkbox" value="" ng-checked="downloadItems.indexOf(x) > -1"
                           ng-click="toggleSelection(x.data)">Select image</label>
             
             
-        <div ng-show="x.value === 'yesStar'"> <img ng-src="/pictures/{{x.data}}" width="300" height="300">
+        <div ng-show="x.value === 'yesStar'"> <img ng-src="/pictures/{{x.data}}" width="{{w}}" height="{{h}}">
         <i class="fa fa-star" aria-hidden="true"></i>
         </div>
         
            
-        <div ng-show="x.value === 'noStar'"> <img ng-src="/pictures/{{x.data}}" width="300" height="300">
+        <div ng-show="x.value === 'noStar'"> <img ng-src="/pictures/{{x.data}}" width="{{w}}" height="{{h}}">
         <i class="fa fa-star-o" aria-hidden="true"></i>
         </div>
            
