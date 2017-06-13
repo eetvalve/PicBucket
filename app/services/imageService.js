@@ -77,7 +77,7 @@ angular.module('imageService', [])
 
                 var helperTable = [];
                 var checkBox = false;
-                var setArray2 = function (table, checkedBox) {
+                var setArray2 = function (table) {
                     helperTable = table;
                     checkBox = checkedBox;
                 };

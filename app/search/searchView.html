@@ -9,8 +9,9 @@
 	}
 	#_searchbar {
     	display: inline;
-		height: 30px;
-    	width: 400px;
+        height: 35px;
+        
+    	max-width: 400px;
     	text-align: center;
     	margin: auto;
     	vertical-align: middle;
@@ -32,7 +33,7 @@
     	vertical-align: middle;
 	    margin-left: 1px;
 	    font-family: "Amatic SC";
-	    font-size: 26px;
+	    font-size: 19px;
 	    font-weight: 600;
 	    color: white;
 	    border-radius:  3px;
@@ -43,6 +44,7 @@
 		height: 40px;
     	display: inline;
     	vertical-align: middle;
+        font-size: 19px;
 	}
 	#centered {
     	width: 590px;
@@ -51,17 +53,27 @@
 	#searchRow {
 		/*background-color: lightgray;*/
 	}
+        .rightCorner{
+            float: right;
+        }
+        #container{width:100%;clear:both;padding-top: 5px;}
+#left{float:left;display:inline-block;}
+#right{float:right;display:inline-block;}
+#center{margin:0 auto;width:50%;display:inline-block;padding-left: 5px;}
 </style>
 
 <div ng-controller="SearchCtrl">
-	<div id="centered">
+	<div id="container">
+            <div id="center">
 	<input 	type="text" 
 			ng-model="searchBox"
 			ng-change="changeHandler()"
 			placeholder="Search by using tags"
 			id="_searchbar"
-			size="screenWidth">
-	</input>
+			size="screenWidth"/>
+	
+            </div>
+        <div id="right">
 	<a><i class="fa fa-square" aria-hidden="true" ng-click="changeview(0)" id="changeView"></i></a>
 	<a><i class="fa fa-th-large" aria-hidden="true" ng-click="changeview(1)" id="changeView"></i></a>
 	<a><i class="fa fa-th" aria-hidden="true" ng-click="changeview(2)" id="changeView"></i></a>
@@ -73,7 +85,9 @@
 		  <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="sortby('date')" href="">Date</a></li>
 		  <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="sortby('meta.owner')" href="">Uploader</a></li>
 		</ul>
-	</div></div>
+        </div></div>
+        
+            <div id="left">
 	Common tags: 
 	<div ng-repeat="x in commonTags" style="display: inline; line-height:2.5">
 		<md-button class="btn btn-primary btn-sm" 
@@ -81,4 +95,7 @@
 			{{x}}
 		</md-button>
 	</div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
 </div>

@@ -1,5 +1,5 @@
 .col-sm-10{
-    border-style: ridge;
+    
 }
 /* make sidebar nav vertical */ 
 @media (min-width: 768px) {
@@ -276,4 +276,13 @@ input.uniq[type=radio], input.uniq[type=checkbox]
 }
 .navigation{
     
+}
+#searchColor{
+    background-color: #00ffbf;
+    padding-bottom: 20px;
+        border-color: #e7e7e7;
+            border: 1px solid #e7e7e7;
+}
+#navi{
+    padding-right: 0;
 }

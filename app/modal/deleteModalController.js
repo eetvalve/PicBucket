@@ -18,11 +18,12 @@ angular.module('deletemodalctrl', [])
                     for (var i = 0; i < $scope.pictureData[0].length; i++) {
                         imageService.deletetPics($scope.pictureData[0][i]);
                     }
+                    $scope.delTrue = true;
                     var table = [];
-                    imageService.setArray2(table);
+                    
                     searchService.updateSearchbarButtons();
                     
-                    return $scope.delTrue = true;
+                    return imageService.setArray2(table);
                 };
 
             }]);

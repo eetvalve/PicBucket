@@ -34,10 +34,11 @@ angular.module('tagmodalctrl', [])
                     for (var i = 0; i < $scope.pictureData.length; i++) {
                         imageService.tagPics($scope.pictureData[i], new_tagTable);
                     }
+                    $scope.delTrue = true;
                     var table = [];
                     var checkedBox = false;
-                    //imageService.setArray2(table, checkedBox);
+                    
                     searchService.updateSearchbarButtons();
-                    return $scope.delTrue = true;
+                    return imageService.setArray2(table);
                 };
             }]);

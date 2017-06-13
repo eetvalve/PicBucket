@@ -1,10 +1,10 @@
 var moment = require('moment');
 
 angular.module('mainctrl', [])
-        .filter('filterByTable', function() {
-            return function(input,searchResultArray,pictureTags,selectedItems) {
+        .filter('filterByTable', function () {
+            return function (input, searchResultArray, pictureTags, selectedItems) {
                 var arr = [];
-                if (typeof(searchResultArray) == "string") 
+                if (typeof (searchResultArray) == "string")
                     searchResultArray = [searchResultArray];
                 for (var i = 0; i < input.length; i++) {
                     var pass = 0;
@@ -12,32 +12,34 @@ angular.module('mainctrl', [])
                         for (var k = 0; k < pictureTags[input[i].data].length; k++) {
                             var str = pictureTags[input[i].data][k]
                             var patt = RegExp(searchResultArray[n], 'i');
-                            if (patt.test(str)&&searchResultArray[n].trim()!="") {
+                            if (patt.test(str) && searchResultArray[n].trim() != "") {
                                 pass++;
                             }
                         }
-                        if(searchResultArray[n].trim()=="") 
-                            pass++; 
+                        if (searchResultArray[n].trim() == "")
+                            pass++;
                     }
-                    if (pass>=searchResultArray.length) 
+                    if (pass >= searchResultArray.length)
                         arr.push(input[i]);
                 }
                 for (var i = 0; i < selectedItems.length; i++) {
-                    var _selected = input.find(function(_arr) {return _arr.data === selectedItems[i]});
-                    if(arr.indexOf(_selected)==-1)
+                    var _selected = input.find(function (_arr) {
+                        return _arr.data === selectedItems[i]
+                    });
+                    if (arr.indexOf(_selected) == -1)
                         arr.push(_selected);
                 }
                 return arr;
             }
         })
-        .controller('MainCtrl', ['$scope', '$http', '$timeout', 'searchService', 'imageService', '$uibModal', 'FileSaver', 'Blob', 'UserService', function ($scope, $http, $timeout, searchService,imageService, $uibModal, FileSaver, Blob, UserService) {
+        .controller('MainCtrl', ['$scope', '$http', '$timeout', 'searchService', 'imageService', '$uibModal', 'FileSaver', 'Blob', 'UserService', function ($scope, $http, $timeout, searchService, imageService, $uibModal, FileSaver, Blob, UserService) {
 
                 $scope.newImageList = [];
                 $scope.favoriteTrue = false;
                 $scope.favoriteFalse = true;
-                
-                $scope.switchTitle="Gallery";
-                
+
+                $scope.switchTitle = "Gallery";
+
                 $scope.starShow = false;
                 $scope.starHide = true;
                 $scope.navOwnNot = true;
@@ -46,8 +48,8 @@ angular.module('mainctrl', [])
                 $scope.searchResultArray = [];
                 $scope.pictureTags = {};
                 //delete pictures
-                
-                
+
+
                 $scope.getUserName = function () {
                     UserService.GetCurrent().then(function (user) {
                         $scope.user = user;
@@ -78,21 +80,21 @@ angular.module('mainctrl', [])
                         }
                     }
                 };
-                
+
                 $scope.GetOnlyStars = function () {
                     $scope.newImageList = [];
                     if (typeof $scope.user.favorite !== "undefined") {
-                    for (var y = 0; y < $scope.pictureData.length; y++) {
-                        for (var i = 0; i < $scope.user.favorite.length; i++) {
-                        if ($scope.user.favorite[i] === $scope.pictureData[y].data) {
-                            $scope.newImageList.push({data: $scope.pictureData[y].data, value: "yesStar"});
-                            console.log($scope.newImageList);
+                        for (var y = 0; y < $scope.pictureData.length; y++) {
+                            for (var i = 0; i < $scope.user.favorite.length; i++) {
+                                if ($scope.user.favorite[i] === $scope.pictureData[y].data) {
+                                    $scope.newImageList.push({data: $scope.pictureData[y].data, value: "yesStar"});
+                                    console.log($scope.newImageList);
+                                }
+                            }
                         }
+                    } else {
+                        console.log("no favorites");
                     }
-                    }
-                }else{
-                    console.log("no favorites");
-                }
                 };
 
 
@@ -114,7 +116,7 @@ angular.module('mainctrl', [])
                                 // console.log($scope.newImageList);
 
                                 if ($scope.user.favorite[i] === shortenDataName) {
-                                    console.log("matchmadeinheaven!");
+                                    //console.log("matchmadeinheaven!");
                                     $scope.newImageList.push({data: $scope.pictureData[y].data, value: "yesStar"});
                                     $scope.starList.push({data: $scope.pictureData[y].data, value: "yesStar"});
                                     y++;
@@ -124,16 +126,16 @@ angular.module('mainctrl', [])
                                 } else if ($scope.user.favorite[i] !== shortenDataName &&
                                         $scope.user.favorite[$scope.user.favorite.length - 1] === $scope.user.favorite[i]) {
 
-                                    console.log("NOPE");
+                                    // console.log("NOPE");
                                     $scope.newImageList.push({data: $scope.pictureData[y].data, value: "noStar"});
-                                    console.log($scope.newImageList);
+                                    // console.log($scope.newImageList);
                                     y++;
                                     i = 0;
 
                                 } else if ($scope.pictureData[$scope.pictureData.length - 1] === $scope.pictureData[y] &&
                                         $scope.user.favorite[$scope.user.favorite.length - 1] === $scope.user.favorite[i]) {
 
-                                    console.log("jep");
+                                    // console.log("jep");
                                     break;
 
                                 }
@@ -147,7 +149,7 @@ angular.module('mainctrl', [])
                         }
                     }
                 };
-                
+
                 $scope.openModal = function () {
 
                     $scope.getArray();
@@ -169,10 +171,10 @@ angular.module('mainctrl', [])
                         controller: 'TagModalCtrl'
                     });
                 };
-                $scope.updateTagTable = function() {
+                $scope.updateTagTable = function () {
                     if ($scope.pictureData) {
                         for (var i = 0; i < $scope.pictureData.length; i++) {
-                                $scope.pictureTags[$scope.pictureData[i].data] = [];
+                            $scope.pictureTags[$scope.pictureData[i].data] = [];
                         }
                         for (var i = 0; i < $scope.pictureData.length; i++) {
                             imageService.getTags($scope.pictureData[i].data).then(function (_tags) {
@@ -183,30 +185,30 @@ angular.module('mainctrl', [])
                         }
                     }
                 };
-                $scope.updateView = function(view) {
-                    switch(view) {
-                    case 1:
-                        $scope.w = 400;
-                        $scope.h = 400;
-                        $scope.fullscreen = false;
-                        break;
-                    case 2:
-                        $scope.w = 200;
-                        $scope.h = 200;
-                        $scope.fullscreen = false;
-                        break;
-                    default:
-                        $scope.w = 600;
-                        $scope.h = 600;
-                        $scope.fullscreen = true;
+                $scope.updateView = function (view) {
+                    switch (view) {
+                        case 1:
+                            $scope.w = 400;
+                            $scope.h = 400;
+                            $scope.fullscreen = false;
+                            break;
+                        case 2:
+                            $scope.w = 200;
+                            $scope.h = 200;
+                            $scope.fullscreen = false;
+                            break;
+                        default:
+                            $scope.w = 600;
+                            $scope.h = 600;
+                            $scope.fullscreen = true;
                     }
                 }
                 $scope.pictureInView = 0;
-                $scope.pervious_image = function() {
-                    if( $scope.pictureInView>0 )
+                $scope.pervious_image = function () {
+                    if ($scope.pictureInView > 0)
                         $scope.pictureInView = $scope.pictureInView - 1;
                 };
-                $scope.next_image = function() {
+                $scope.next_image = function () {
                     $scope.pictureInView = $scope.pictureInView + 1;
                 };
                 $scope.updateView(0);
@@ -228,12 +230,12 @@ angular.module('mainctrl', [])
                         console.log($scope.pictureData);
                         console.log("!!PICTURE DATA!!");
                     });
-                };  
+                };
                 $scope.$watch(function () {
                     return $scope.navFav = imageService.getFav();
                 }, function (data) {
                     console.log("tapahtuu");
-                   $scope.switchTitle="Favorites";
+                    $scope.switchTitle = "Favorites";
                     $scope.GetOnlyStars();
                 });
                 $scope.$watch(function () {
@@ -251,19 +253,19 @@ angular.module('mainctrl', [])
                 $scope.$watch(function () {
                     return $scope.navOwn = imageService.getOwn();
                 }, function (data) {
-                    $scope.switchTitle="My pictures";
+                    $scope.switchTitle = "My pictures";
                     $scope.GetOwnImages();
-                    
+
                 });
-                
+
                 $scope.$watch(function () {
                     return $scope.change = imageService.getFav2();
                 }, function (data) {
                     console.log("gg");
-                    $scope.switchTitle="Gallery";
+                    $scope.switchTitle = "Gallery";
                     $scope.GetAll();
                 });
-                
+
 
                 $scope.$watch(function () {
                     return imageService.watchUpdate();
@@ -284,7 +286,14 @@ angular.module('mainctrl', [])
                     return imageService.getArray2();
                 }, function (value) {
                     $scope.downloadItems = value;
-
+                    console.log($scope.downloadItems);
+                    if ($scope.downloadItems.length > 0) {
+                        $scope.selectedDownloadItem = true;
+                        console.log("juu");
+                    } else {
+                        $scope.selectedDownloadItem = false;
+                        console.log("ei");
+                    }
                 });
 
                 $scope.$watch(function () {
@@ -300,16 +309,16 @@ angular.module('mainctrl', [])
                     // Is currently selected
                     if (idx > -1) {
                         $scope.downloadItems.splice(idx, 1);
-                        //console.log('downloadItems');
-                        //console.log($scope.downloadItems);
+                        console.log('downloadItems');
+                        console.log($scope.downloadItems);
                     }
 
                     // Is newly selected
                     else {
                         $scope.downloadItems.push(x);
 
-                        //console.log('downloadItems');
-                        //console.log($scope.downloadItems);
+                        console.log('downloadItems');
+                        console.log($scope.downloadItems);
                     }
 
                     //show div where the download button is, if some checkbox is 
@@ -330,7 +339,10 @@ angular.module('mainctrl', [])
 
 
                 $scope.favorite = function () {
-                     UserService.addFavorites($scope.user, $scope.downloadItems);
+                    UserService.addFavorites($scope.user, $scope.downloadItems);
+                    $scope.downloadItems = [];
+                    $scope.selectedDownloadItem = false;
+                   // imageService.getPics();
                 };
 
 
@@ -340,16 +352,16 @@ angular.module('mainctrl', [])
                 var tabl = [];
                 $scope.searchResult = searchService.getSearchResult();
                 searchService.ApplyForUpdates($scope);
-                $scope.$watch('searchResult', function() {
+                $scope.$watch('searchResult', function () {
                     var tabl = $scope.searchResult.toString().split(",");
-                    if (tabl.length>1) {
+                    if (tabl.length > 1) {
                         $scope.searchResultArray = [];
                         for (var i = 0; i < tabl.length; i++) {
                             var str = tabl[i].trim();
                             $scope.searchResultArray.push(str);
                         }
-                    }else{
+                    } else {
                         $scope.searchResultArray = $scope.searchResult
                     }
-                 }, true);
+                }, true);
             }]);
